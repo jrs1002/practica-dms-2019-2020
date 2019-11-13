@@ -106,12 +106,18 @@ class Arbitro:
             self.turno = 1
 
     def mandarTablero(self, destinatario):
+        """
+        Envía el tablero al destinatario
+        """
         if (destinatario == self.jugador1):
             self.enviarMensaje(self.jugador1, '202', self.tablero.getTablero())
         else:
             self.enviarMensaje(self.jugador2, '202', self.tablero.getTablero())
 
     def mandarTurno(self, destinatario):
+        """
+        Se envia el turno al jugador que le corresponde
+        """
         if (self.jugador1 == destinatario):
             if(self.turno == 1):
                 self.enviarMensaje(destinatario, '205', True)
@@ -124,6 +130,9 @@ class Arbitro:
                 self.enviarMensaje(destinatario, '205', False)
 
     def consultarReinicio(self):
+        """
+        Consulta si se quiere reiniciar el juego
+        """
         self.enviarMensaje(self.jugador1, '203')
         self.enviarMensaje(self.jugador2, '203')
         time.sleep(1)
@@ -134,9 +143,15 @@ class Arbitro:
             self.enviarMensaje(self.jugador2, '206')
 
     def reiniciar(self):
+        """
+        Se reinicia el juego
+        """
         for i in range(3):
             for j in range(3):
                 self.tablero.setFicha(0, i, j)
 
     def enviarMensaje(self, destinatario, codigo, contenido=None):  # TODO
+        """
+        Se envía el mensaje al destinatario
+        """
         pass
