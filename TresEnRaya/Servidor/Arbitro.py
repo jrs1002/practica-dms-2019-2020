@@ -1,4 +1,4 @@
-from Tablero import Tablero
+from Servidor.Tablero import Tablero
 import time
 
 

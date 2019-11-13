@@ -1,6 +1,6 @@
 class Tablero:
     def __init__(self):
-        self.tab = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        self.tab = [[0, 0, 0], [0, 0, 0], [1, 0, 1]]
 
     def setFicha(self, color, posicionX, posicionY):
         """
@@ -18,40 +18,21 @@ class Tablero:
         """
         Pide el tablero y lo muestra por pantalla.
         """
-        print('    1 '+'  2 '+'  3 ')
+        x = '    1    2    3 \n'
         for i in range(3):
-            print('  +---+---+---+')
-            print((i+1)+' | ', end='')
+            x += '   +---+---+---+\n' + str(i+1) +  '  | '
+            for j in range(1, 3):
 
-            if(self.tab[i][0] == 0):
-                print(' ', end='')
+                if(self.tab[i][j] == 0):
+                    x += ' '
 
-            elif(self.tab[i][0] == 1):
-                print('X', end='')
+                elif(self.tab[i][j] == 1):
+                    x += 'X'
 
-            else:
-                print('O', end='')
+                else:
+                    x += 'O'
+                x += ' | '
 
-            print(' | ', end='')
-
-            if(self.tab[i][1] == 0):
-                print(' ', end='')
-
-            elif(self.tab[i][1] == 1):
-                print('X', end='')
-
-            else:
-                print('O', end='')
-
-            if(self.tab[i][2] == 0):
-                print(' ', end='')
-
-            elif(self.tab[i][1] == 1):
-                print('X', end='')
-
-            else:
-                print('O', end='')
-
-            print(' |')
-
-            print(' +---+---+---+')
+            x += '  |\n'
+        x += '   +---+---+---+'
+        print(x)
