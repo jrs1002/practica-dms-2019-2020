@@ -19,7 +19,7 @@ class Arbitro:
         self.turno = 1              # Turno actual
         self.mensaje = None         # Último mensaje recibido
 
-    def jugar(self):
+    def arbitrar(self):
         """
         Mientras no se haya terminado el juego, se queda a la espera de mensajes.
         """
@@ -35,7 +35,7 @@ class Arbitro:
         mensaje = self.recibirMensaje()
         operaciones = {'101': self.comprobarMovimiento(mensaje.content),
                        '102': self.mandarTablero(mensaje.destinatario),
-                       '103': self.mandarTurno(mensaje.destinatario)}  # adaptar para que funcione lo de content y destinatario
+                       '103': self.confirmarTurno(mensaje.destinatario)}  # adaptar para que funcione lo de content y destinatario
         operaciones[mensaje.cod]  # adapatar al codigo de mensaje
 
     def recibirMensaje(self):
@@ -66,10 +66,14 @@ class Arbitro:
 
         if (movimiento[0] in posibilidades & movimiento[1] in posibilidades & tab[movimiento[0]][movimiento[1]] == 0):
             self.realizarMovimiento(movimiento)
-            if (self.esFin()):
+            self.esFin()
+
+            if (self.fin):
                 self.consultarReinicio()
+
             elif (self.turno == 1):
                 self.enviarMensaje(self.jugador1, '207')
+
             else:
                 self.enviarMensaje(self.jugador2, '207')
 
@@ -86,15 +90,15 @@ class Arbitro:
         """
         tab = self.tablero.getTablero()
         if(tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
-            return True
+            self.fin = True
 
         if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
-            return True
+            self.fin = True
 
         if(tab[0][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[1][1] == tab[0][2]):
-            return True
+            self.fin = True
 
-        return False
+        self.fin = False
 
     def realizarMovimiento(self, movimiento):
         """
@@ -105,7 +109,7 @@ class Arbitro:
         movimiento -- Coordenadas [x,y] del destino del movimiento
         """
         self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-        
+
         if (self.turno == 1):
             self.turno = 2
         else:
@@ -120,10 +124,17 @@ class Arbitro:
         else:
             self.enviarMensaje(self.jugador2, '202', self.tablero.getTablero())
 
-    def mandarTurno(self, destinatario):
+    def turnoActual(self):
         """
-        Se envia el turno al jugador que le corresponde
+        Devuelve al servidor el turno actual.
         """
+        return self.turno
+
+    def confirmarTurno(self, destinatario):
+        """
+        Se envía un mensaje al jugador diciéndole si tiene el turno o no
+        """
+        # Se podría cambiar el true o false por un código de movCorrecto y otro movIncorrecto
         if (self.jugador1 == destinatario):
             if(self.turno == 1):
                 self.enviarMensaje(destinatario, '205', True)
@@ -155,9 +166,12 @@ class Arbitro:
         for i in range(3):
             for j in range(3):
                 self.tablero.setFicha(0, i, j)
+                self.fin = False
+                self.turno = 1
 
     def enviarMensaje(self, destinatario, codigo, contenido=None):  # TODO
         """
         Se envía el mensaje al destinatario
         """
+
         pass

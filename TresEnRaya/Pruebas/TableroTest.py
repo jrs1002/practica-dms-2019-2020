@@ -1,6 +1,6 @@
 import sys
 sys.path.append('./Servidor')
-from Tabero import Tablero
+from Tablero import Tablero
 
 tablero = Tablero()
 

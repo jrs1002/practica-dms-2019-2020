@@ -4,7 +4,7 @@ from Servidor.Arbitro import Arbitro
 
 class InterfazJugador:
     def __init__(self):
-        self.destinatario = self.obtenerArbitro()   # Se obtiene el árbitro
+        self.destinatario = self.obtenerDestinatario()   # Se obtiene el árbitro
         self.fin = False                            # Se establece el fin de juego a falso
         self.mensaje = None                         # Se almacena el último mensaje recibido
 
@@ -19,12 +19,12 @@ class InterfazJugador:
             else:
                 time.sleep(1)
 
-    def obtenerArbitro(self):
+    def obtenerDestinatario(self):
         """
         Si el árbitro está creado, se obtiene
         Si no, se solicita al servidor que se cree uno
         """
-        # TODO
+        # TODO 
         return 1
 
     def pintarTablero(self):
