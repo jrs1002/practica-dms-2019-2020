@@ -5,8 +5,8 @@ import time
 class Arbitro:
     def __init__(self, jugador1, jugador2):
         """
-        Inicializa el árbitro con dos jugadores que recibe como param
-        Se crea el tablero con el que se trabajará
+        Inicializa el árbitro con dos jugadores que recibe como parámetro.
+        Se crea el tablero con el que se trabajará.
 
         Param:
         jugador1 -- Primer jugador (contiene el código para enviar mensajes)
@@ -21,15 +21,15 @@ class Arbitro:
 
     def jugar(self):
         """
-        Mientras no se haya terminado el juego, se queda a la espera de mensajes
+        Mientras no se haya terminado el juego, se queda a la espera de mensajes.
         """
         while(not self.fin):
             self.esperarMensaje()
 
     def esperarMensaje(self):
         """
-        Se queda a la espera de un mensaje
-        Una vez lo recibe actúa en función de su código
+        Se queda a la espera de un mensaje.
+        Una vez lo recibe actúa en función de su código.
         """
         # TODO implementar la comunicación entre clases
         mensaje = self.recibirMensaje()
@@ -40,11 +40,12 @@ class Arbitro:
 
     def recibirMensaje(self):
         """
-        Se queda a la espera hasta que recibe un mensaje y lo devuelve
+        Se queda a la espera hasta que recibe un mensaje y lo devuelve.
         """
         # TODO implementar la recepción del mensaje
         while (self.mensaje is None):
             time.sleep(1)
+
         return self.mensaje
 
     def comprobarMovimiento(self, movimiento):
@@ -62,6 +63,7 @@ class Arbitro:
         """
         tab = self.tablero.getTablero()
         posibilidades = [0, 1, 2]
+
         if (movimiento[0] in posibilidades & movimiento[1] in posibilidades & tab[movimiento[0]][movimiento[1]] == 0):
             self.realizarMovimiento(movimiento)
             if (self.esFin()):
@@ -70,6 +72,7 @@ class Arbitro:
                 self.enviarMensaje(self.jugador1, '207')
             else:
                 self.enviarMensaje(self.jugador2, '207')
+
         else:
             if (self.turno == 1):
                 self.enviarMensaje(self.jugador1, '201')
@@ -78,17 +81,19 @@ class Arbitro:
 
     def esFin(self):
         """
-        Obtiene el tablero y busca jugadas ganadoras
-        Si la encuentra, devuelve True.
-        Si no, False
+        Obtiene el tablero y busca jugadas ganadoras.
+        Si la encuentra, devuelve True, si no False.
         """
         tab = self.tablero.getTablero()
         if(tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
             return True
+
         if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
             return True
+
         if(tab[0][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[1][1] == tab[0][2]):
             return True
+
         return False
 
     def realizarMovimiento(self, movimiento):
@@ -100,6 +105,7 @@ class Arbitro:
         movimiento -- Coordenadas [x,y] del destino del movimiento
         """
         self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
+        
         if (self.turno == 1):
             self.turno = 2
         else:

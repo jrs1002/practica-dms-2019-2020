@@ -27,6 +27,12 @@ class InterfazJugador:
         # TODO
         return 1
 
+    def pintarTablero(self):
+        """
+        Obtiene el tablero y lo imprime por pantalla.
+        """
+        self.pedirTablero().pintarTablero()
+
     def realizarJugada(self):
         """
         También va de mover
@@ -104,38 +110,6 @@ class InterfazJugador:
         """
         self.enviarMensaje(self.destinatario, '102')
         return self.recibirMensaje().content
-
-    def pintarTablero(self):
-        """
-        Pide el tablero y lo muestra por pantalla
-        """
-        tab = self.pedirTablero()
-        print('    1 '+'  2 '+'  3 ')
-        for i in range(3):
-            print('  +---+---+---+')
-            print((i+1)+' | ', end='')
-            if(tab[i][0] == 0):
-                print(' ', end='')
-            elif(tab[i][0] == 1):
-                print('X', end='')
-            else:
-                print('O', end='')
-            print(' | ', end='')
-            if(tab[i][1] == 0):
-                print(' ', end='')
-            elif(tab[i][1] == 1):
-                print('X', end='')
-            else:
-                print('O', end='')
-            ' | '
-            if(tab[i][2] == 0):
-                print(' ', end='')
-            elif(tab[i][1] == 1):
-                print('X', end='')
-            else:
-                print('O', end='')
-            print(' |')
-            print(' +---+---+---+')
 
     def enviarMensaje(self, destinatario, codigo, contenido=None):
         """
