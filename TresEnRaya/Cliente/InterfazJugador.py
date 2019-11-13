@@ -1,5 +1,5 @@
 import time
-from TresEnRaya.Servidor.Arbitro import Arbitro
+from Servidor.Arbitro import Arbitro
 
 
 class InterfazJugador:
