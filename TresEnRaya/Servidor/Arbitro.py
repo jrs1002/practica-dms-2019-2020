@@ -23,85 +23,109 @@ class Arbitro:
         """
         Mientras no se haya terminado el juego, se queda a la espera de mensajes.
         """
-        while(not self.fin):
-            self.esperarMensaje()
+        
+        # Cuando se reciba un mensaje 102 se tiene que enviar el tablero y el código de 
+        # mensaje 202
 
-    def comprobarMovimiento(self, movimiento):
+        # cuando haya acabado la partida esFin() == True
+        #   llamar solicitud reinicio de InterfazJugador()
+        #       - Si ambos quieren reiniciar (ambos codigo 100) llamar reiniciar()
+        #       - Si uno quiere reiniciar y el otro no enviar un código para mandar
+        #         salir (Cliente) al jugador que no quiere y el otro se quede esperando (un tiempo)
+        #         y si no se encuentra a nadie se dice que ha finalizado la partida
+        #       - Si ambos quieren salir mandar salir (Cliente)
+
+    def turnoActual(self):
         """
-        Obtiene un movimiento y comprueba si este es válido.
-        Para ello tiene en cuenta el jugador que ha enviado el movimiento 
-        y el estado del tablero.
+        Devuelve al servidor el turno actual.
 
-        Envia un mensaje al jugador:
-        207 -- Movimiento correcto
-        201 -- Movimiento incorrecto
-
-        Parámetros:
-        movimiento -- Coordenadas [x,y] del destino del movimiento
+        Return:
+        turno -- Turno actual
         """
-        tab = self.tablero.getTablero()
-        posibilidades = [0, 1, 2]
+        return self.turno
 
-        if (movimiento[0] in posibilidades & movimiento[1] in posibilidades & tab[movimiento[0]][movimiento[1]] == 0):
-            self.realizarMovimiento(movimiento)
-            self.esFin()
-
-            if (self.fin):
-                self.consultarReinicio()
-
-            elif (self.turno == 1):
-                self.enviarMensaje(self.jugador1, '207')
-
-            else:
-                self.enviarMensaje(self.jugador2, '207')
-
-        else:
-            if (self.turno == 1):
-                self.enviarMensaje(self.jugador1, '201')
-            else:
-                self.enviarMensaje(self.jugador2, '201')
-
-    def realizarMovimiento(self, movimiento):
+    def cambiarTurno(self):
         """
-        Obtiene una posición y coloca la ficha del turno correspondiente.
-        El movimiento ha de ser validado previamente.
-
-        Parámetros:
-        movimiento -- Coordenadas [x,y] del destino del movimiento
+        Cambia el turno del jugador.
         """
-        self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-
-        if (self.turno == 1):
+        if(self.turnoActual == 1):
             self.turno = 2
         else:
             self.turno = 1
 
     def esFin(self):
         """
-        Obtiene el tablero y busca jugadas ganadoras.
-        Si la encuentra, devuelve True, si no False.
+        Obtiene el tablero y busca jugadas ganadoras o si el tablero está lleno.
+
+        Return:
+        Bool -- True si se ha acabado el juego, False si no
         """
         tab = self.tablero.getTablero()
+
         if(tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
-            self.fin = True
+            return True
 
         if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
-            self.fin = True
+            return True
 
         if(tab[0][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[1][1] == tab[0][2]):
-            self.fin = True
+            return True
+
+        if(self.tablero.estaLleno()):
+            return True
 
         self.fin = False
 
-    def turnoActual(self):
+    def comprobarMovimiento(self, mov):
         """
-        Devuelve al servidor el turno actual.
+        Obtiene un movimiento y comprueba si este es válido.
+        Para ello tiene en cuenta el jugador que ha enviado el movimiento 
+        y el estado del tablero.
+
+        Envia un mensaje al jugador:
+        203 -- Movimiento incorrecto
+
+        Parámetros:
+        mov -- String "xy" del destino del movimiento
+
+        Return: 
+        String -- Mensaje que envía el Servidor al Cliente
         """
-        return self.turno
+        # Convertimos el string movimiento a un array
+        movimiento = [int(mov[0]),int(mov[1])]
+
+        tab = self.tablero.getTablero()
+        posibilidades = [0, 1, 2]
+
+        # Si el movimiento es correcto
+        if (movimiento[0] in posibilidades & movimiento[1] in posibilidades & tab[movimiento[0]][movimiento[1]] == 0):
+            self.realizarMovimiento(movimiento)
+            self.esFin()
+
+            # Si es fin de partida se consulta si se quiere reiniciar
+            if (self.esFin()):
+                return 0 # Mensaje consultar reinicio
+
+        # Si el movimiento es incorrecto se manda un mensaje al cliente para volver
+        # a solicitarlo
+        else:
+            return '203'    # Mirar
+
+    def realizarMovimiento(self, movimiento):
+        """
+        Coloca la ficha en la posición indicada por movimiento.
+        Cambia de turno.
+
+        Parámetros:
+        movimiento -- Coordenadas [x,y] del destino del movimiento
+        """
+        self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
+
+        self.cambiarTurno()
 
     def reiniciar(self):
         """
-        Se reinicia el juego
+        Se reinicia el juego.
         """
         for i in range(3):
             for j in range(3):
