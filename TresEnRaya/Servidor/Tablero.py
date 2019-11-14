@@ -14,7 +14,8 @@ class Tablero:
         """
         return self.tab
 
-    def pintarTablero(self):
+    
+    def dibujarTablero(self):
         """
         Pide el tablero y lo muestra por pantalla.
         """
@@ -35,4 +36,4 @@ class Tablero:
 
             x += '  |\n'
         x += '   +---+---+---+'
-        print(x)
+        return x
