@@ -14,7 +14,6 @@ class Tablero:
         """
         return self.tab
 
-    
     def dibujarTablero(self):
         """
         Pide el tablero y lo muestra por pantalla.
@@ -37,3 +36,11 @@ class Tablero:
             x += '  |\n'
         x += '   +---+---+---+'
         return x
+
+    def estaLleno(self):
+        lleno = True
+        for i in range(3):
+            for j in range(1, 3):
+                 if(self.tab[i][j] == 0):
+                     lleno = False
+        return lleno

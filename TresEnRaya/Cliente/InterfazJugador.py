@@ -3,125 +3,52 @@ from Servidor.Arbitro import Arbitro
 
 
 class InterfazJugador:
-    def __init__(self):
-        self.destinatario = self.obtenerDestinatario()   # Se obtiene el árbitro
-        self.fin = False                            # Se establece el fin de juego a falso
-        self.mensaje = None                         # Se almacena el último mensaje recibido
+    def __init__(self, _jugador):
+        self.jugador = _jugador
+        self.ficha = 'X' if (_jugador == 1 ) else 'O'
+        self.tablero = None
 
-    def jugar(self):
+
+    def jugar(self, msg, obj = None):
         """
         Mientras no se finalice el juego se obtiene el turno y se realiza una jugada
+        102: solicitar tablero
         """
-        while(not self.fin):
-            if(self.pedirTurno):
-                print('Es su turno.')
-                self.realizarJugada()
-            else:
-                time.sleep(1)
+        mensajes = {
+            '202': self.imprimirTablero(obj)     #Mirar como se hace
+        }
 
-    def obtenerDestinatario(self):
+    def imprimirTablero(self,_tablero):
         """
-        Si el árbitro está creado, se obtiene
-        Si no, se solicita al servidor que se cree uno
+        Muestra por pantalla el tablero.
         """
-        # TODO 
-        return 1
+        self.tablero = _tablero
+        print(_tablero)
 
-    def pintarTablero(self):
-        """
-        Obtiene el tablero y lo imprime por pantalla.
-        """
-        self.pedirTablero().pintarTablero()
+    def solicitarMov(self):
+        mov=""
+        mov += input('Introduce la fila: ')
+        mov += " "
+        mov += input('Introduce la columna: ')
 
-    def realizarJugada(self):
-        """
-        También va de mover
-        Se pinta el tablero
-        Se solicita al usuario un movimiento
-        Se envía el movimiento al servidor
-        Se muestra el tablero actualizado
-        """
-        self.pintarTablero()
-        incorrecto = True
-        while(incorrecto):
-            x = input('Introduce la fila: ')
-            y = input('Introduce la columna: ')
-            self.enviarMensaje(self.destinatario, '101', [x-1, y-1])
-            mensaje = self.esperarMensaje()
+        return mov
 
-            # TODO comprobar código de mensaje
-            if(mensaje.cod == '201'):
-                incorrecto = True
-                self.pintarTablero()
-                print('Movimiento incorrecto, inroduzca un movimiento correcto.')
-            elif(mensaje.cod == '207'):
-                incorrecto = False
-            elif(mensaje.cod == '203'):
-                self.secuenciaFinalizacion()
-        self.pintarTablero()
-        print('Espere su turno.')
 
-    def esperarMensaje(self):
-        """
-        Se queda en estado de espera hasta que recibe un mensaje
-        Devuelve el mensaje
-        """
-        return self.mensaje
-
-    def secuenciaFinalizacion(self):
+    #Meter en jugar los mensajes
+    def solicitudReinicio(self):
         """
         Una vez se ha terminado el juego se pregunta si se quiere reiniciar
         Si no se quiere reiniciar, se finaliza el juego
+        100: reinicio partida
+        101: fin juego
         """
         print('El juego ha finalizado.')
-        self.pintarTablero()
-        print('¿Desea Iniciar una nueva partida?(1)Sí, (2)No.')
-        resp = input()
+        self.imprimirTablero(self.tablero)
+
+        resp = input('¿Desea Iniciar una nueva partida?(1)Sí, (2)No.')
         while(resp != 1 & resp != 2):
-            print('Opción erronea ¿Desea Iniciar una nueva partida?(1)Sí, (2)No.')
-            resp = input()
+            resp = input('Opción erronea ¿desea iniciar una nueva partida?(1)Sí, (2)No.')
         if(resp == 1):
-            self.enviarMensaje(self.destinatario, '104')
+            return 100
         else:
-            self.enviarMensaje(self.destinatario, '105')
-        resp = self.recibirMensaje()
-        if(resp.cod == '204'):
-            print('El juego se reiniciará.')
-            time.sleep(1)
-        else:
-            print('La partida se ha finalizado.')
-            self.fin = True
-
-    def pedirTurno(self):
-        """
-        Envía un mensaje solicitando el turno y se queda a la espera de respuesta.
-        Si la respuesta es la finalización, llama a secuenciaFinalización()
-        Si no, devuelve el contenido del mensaje
-        """
-        self.enviarMensaje(self.destinatario, '103')
-        mensaje = self.recibirMensaje()
-        if(mensaje.cod == '203'):
-            self.secuenciaFinalizacion()
-        return mensaje.content  # TODO implementar
-
-    def pedirTablero(self):
-        """
-        Envía un mensaje para obtener el tablero
-        """
-        self.enviarMensaje(self.destinatario, '102')
-        return self.recibirMensaje().content
-
-    def enviarMensaje(self, destinatario, codigo, contenido=None):
-        """
-        Envia el mensaje al destinatario
-        """
-        pass
-
-    def recibirMensaje(self):
-        """
-        Se queda a la espera hasta que recibe un mensaje y lo devuelve
-        """
-        # TODO implementar la recepción del mensaje
-        while (self.mensaje is None):
-            time.sleep(1)
-        return self.mensaje
+            return 101
