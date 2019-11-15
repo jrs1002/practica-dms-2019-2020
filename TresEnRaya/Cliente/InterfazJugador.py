@@ -1,5 +1,4 @@
 import time
-from Servidor.Arbitro import Arbitro
 
 
 class InterfazJugador:
@@ -25,7 +24,7 @@ class InterfazJugador:
         self.ficha = 'X' if (_jugador == 1 ) else 'O'
         self.tablero = None # Se almacena el último tablero recibido del servidor
 
-        print('Eres el jugador' + self.jugador + ' con ficha ' + self.ficha + '.')
+        print('Eres el jugador' + str(self.jugador) + ' con ficha ' + self.ficha + '.')
 
     def jugar(self, msg=None, obj = None):
         """
@@ -42,17 +41,17 @@ class InterfazJugador:
 
         # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
       
-        fin = 1 # Si no se requiere ningún objeto se devolverá 1
+        fin = 0 # Si no se requiere ningún objeto se devolverá 0
         
-        if (msg == '202') self.imprimirTablero(obj)
-        if (msg == '203') fin = self.solicitarMov()
+        if (msg == '202'): self.imprimirTablero(obj)
+        if (msg == '203'): fin = self.solicitarMov()
 
         return fin
 
     
     def imprimirTablero(self,_tablero):
         """
-        Muestra por pantalla el tablero.
+        Muestra por pantalla el  tablero.
 
         Parámetros:
         _tablero -- Representación del tablero
@@ -64,15 +63,13 @@ class InterfazJugador:
     def solicitarMov(self):
         """
         Se solicita al jugador el movimiento.
-        Se devuelve como un string "x y".
+        Se devuelve como un string "xy".
 
         Return:
         mov -- String con el movimiento introducido
         """
         mov =  input('Introduce la fila: ')
-        mov += " "
         mov += input('Introduce la columna: ')
-
         return mov
 
     #Meter en jugar los mensajes

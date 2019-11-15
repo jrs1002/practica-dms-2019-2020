@@ -1,4 +1,4 @@
-from Servidor.Tablero import Tablero
+from Tablero import Tablero
 import time
 
 
@@ -19,7 +19,7 @@ class Arbitro:
         self.turno = 1              # Turno actual
         self.mensaje = None         # Último mensaje recibido
 
-    def arbitrar(self):
+    def arbitrar(self,msg,obj):
         """
         Mientras no se haya terminado el juego, se queda a la espera de mensajes.
         """
@@ -34,6 +34,7 @@ class Arbitro:
         #         salir (Cliente) al jugador que no quiere y el otro se quede esperando (un tiempo)
         #         y si no se encuentra a nadie se dice que ha finalizado la partida
         #       - Si ambos quieren salir mandar salir (Cliente)
+        if(msg=="202"): 
 
     def turnoActual(self):
         """
@@ -91,7 +92,7 @@ class Arbitro:
         Return: 
         String -- Mensaje que envía el Servidor al Cliente
         """
-        # Convertimos el string movimiento a un array
+        # Convertimos el string movimiento a un array 
         movimiento = [int(mov[0]),int(mov[1])]
 
         tab = self.tablero.getTablero()
@@ -127,6 +128,8 @@ class Arbitro:
         """
         Se reinicia el juego.
         """
+        # TODO julen: yo cambiaría este bucle por un método iniciarTablero en tablero
+
         for i in range(3):
             for j in range(3):
                 self.tablero.setFicha(0, i, j)
