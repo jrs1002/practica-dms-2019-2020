@@ -1,0 +1,10 @@
+
+			Códigos de mensaje Cliente-Servidor
+
+	Cliente --> Servidor				Servidor --> Cliente 			
+		
+101: done							201:
+102:								202: imprimirTablero 	OBJ: Tablero	
+103: movimiento		OBJ: mov 		203: solicitarMov
+104:								204: 
+

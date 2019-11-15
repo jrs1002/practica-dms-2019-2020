@@ -23,7 +23,7 @@ class InterfazJugador:
         """
         self.jugador = _jugador
         self.ficha = 'X' if (_jugador == 1 ) else 'O'
-        self.tablero = None
+        self.tablero = None # Se almacena el último tablero recibido del servidor
 
         print('Eres el jugador' + self.jugador + ' con ficha ' + self.ficha + '.')
 
@@ -34,32 +34,21 @@ class InterfazJugador:
         Parámetros:
         msg -- Mensaje recibido del Servidor
         obj -- Objeto recibido del Servidor
+        
+        Return:
+        fin -- Objeto a devolver
         """
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
 
-        # Solicitar movimiento --> Si es erroneo con mensaje 203 ya s evuelve a solicitar   
-              
-        if(msg != None):
-            self.switch(msg, obj)  # Mirar lo del objeto
+        # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
+      
+        fin = 1 # Si no se requiere ningún objeto se devolverá 1
+        
+        if (msg == '202') self.imprimirTablero(obj)
+        if (msg == '203') fin = self.solicitarMov()
 
-    def switch(self, msg, obj=None):
-        """
-        Función que define el switch para saber qué hacer en función del
-        mensaje recibido.
+        return fin
 
-        Parámetros:
-        msg -- Mensaje recibido del Servidor
-        obj -- Objeto recibido del Servidor
-
-        Return:
-        Acción a realizar
-        """
-        mensajes = {
-             '202' : self.imprimirTablero(obj),       #Mirar como se hace
-             '203' : self.solicitarMov()             # Si el movimiento es incorrecto volver a solicitar
-        }
-
-        return mensajes.get(msg)
     
     def imprimirTablero(self,_tablero):
         """
@@ -75,13 +64,13 @@ class InterfazJugador:
     def solicitarMov(self):
         """
         Se solicita al jugador el movimiento.
-        Se devuelve como un string "xy".
+        Se devuelve como un string "x y".
 
         Return:
         mov -- String con el movimiento introducido
         """
-        mov = ""
-        mov += input('Introduce la fila: ')
+        mov =  input('Introduce la fila: ')
+        mov += " "
         mov += input('Introduce la columna: ')
 
         return mov

@@ -130,7 +130,7 @@ class Arbitro:
         for i in range(3):
             for j in range(3):
                 self.tablero.setFicha(0, i, j)
-                self.fin = False
-                self.turno = 1
+        self.fin = False
+        self.turno = 1
 
    
