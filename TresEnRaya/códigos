@@ -4,7 +4,8 @@
 	La estructura de mensajes será: codigo---objeto
 
 	Cliente --> Servidor				Servidor --> Cliente 			
-		
+
+100: reiniciar		OBJ: 0			200: 
 101: done			OBJ: 0			201: inicializarJugador OBJ: numJugador (1 o 2)
 102: quiero jugar 	OBJ: 1 o 2		202: imprimirTablero 	OBJ: Tablero	
 103: movimiento		OBJ: mov 		203: solicitarMov       OBJ: 0

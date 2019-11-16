@@ -46,7 +46,7 @@ def enviarEspecial(cliente):
     client = lista_de_clientes.pop()
     cliente.send(client.encode("UTF-8")) #Envia al cliente su nº de cliente(1 o 2)
 
-def enviar_Mensaje(mensaje,cliente): #Para enviar mensajes Servidor-Cliente
+def enviar_Mensaje(mensaje,cliente): #Para enviar mensajes Servidor->Cliente
         try:
             cliente.send(mensaje.encode("UTF-8"))
         except:
@@ -110,9 +110,24 @@ def main():
     
     arbitro = Arbitro(1,2)    
 
-    while not exit:
-        # Meter lo de arbitrar
-        pass
+    cliente = cliente1 # Empieza jugando el jugador1
+    mens,obj,dest = arbitro.arbitrar("103") 
+    enviar_Mensaje(mens+"---"+obj,cliente)
+    
+    while not exit:   # Necesarios para que los hilos no mueran
+        """
+        Aqui tendremos que meter la comunicación con jugador
+        recibir mensaje
+        pasarselo a jugador
+        enviar respuesta
+        """
+        mens, obj = interpretarMensaje(recibir(s))
+        mens, obj, dest = arbitro.jugar(mens,obj)
+        # if mens = finalizar : exit = True
+
+        # Cuando cambie dest, se cambia el turno
+        cliente = cliente1 if dest==1 else cliente2
+        enviar_Mensaje(mens+"---"+obj,cliente)
 
 #Llamada al main
 main()

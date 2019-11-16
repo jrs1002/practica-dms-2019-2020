@@ -26,7 +26,7 @@ class InterfazJugador:
 
         print('Eres el jugador' + str(self.jugador) + ' con ficha ' + self.ficha + '.')
 
-    def jugar(self, msg=None, obj = None):
+    def jugar(self, msg, obj = None):
         """
         En función del mensaje recibido se realiza una cierta acción.
 
@@ -38,13 +38,13 @@ class InterfazJugador:
         fin -- Objeto a devolver
         """
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
-        if (msg == '202'): self.imprimirTablero(obj)      
+        # Si no se requiere ningún objeto se devolverá 0
         
+        if (msg == '202'): fin, obj = self.imprimirTablero(obj)      
         # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
-        if (msg == '203'): fin = self.solicitarMov()
+        if (msg == '203'): fin, obj = self.solicitarMov()
         
-        fin = 0 # Si no se requiere ningún objeto se devolverá 0
-        return fin
+        return fin, obj
 
     def imprimirTablero(self,_tablero):
         """
@@ -56,6 +56,8 @@ class InterfazJugador:
         self.tablero = _tablero
         print(_tablero)
 
+        return "101","0" # Código DONE (tablero impreso)
+
     def solicitarMov(self):
         """
         Se solicita al jugador el movimiento.
@@ -66,7 +68,7 @@ class InterfazJugador:
         """
         mov =  input('Introduce la fila: ')
         mov += input('Introduce la columna: ')
-        return mov
+        return "103", mov
 
     #Meter en jugar los mensajes
     def solicitudReinicio(self):

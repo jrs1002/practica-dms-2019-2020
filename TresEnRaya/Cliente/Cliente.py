@@ -86,6 +86,7 @@ def main():
     print("\nConexión establecida\nEl servidor es:", host+":"+str(port)+"\n")
 
     jugador = inicializarJugador(s)
+    
 
     while not exit:   # Necesarios para que los hilos no mueran
         """

@@ -18,15 +18,12 @@ class Arbitro:
         self.turno = 1              # Turno actual
         self.mensaje = None         # Último mensaje recibido
 
-    def arbitrar(self,msg,obj):
-        """
-        Mientras no se haya terminado el juego, se queda a la espera de mensajes.
-        """
-        
+    def arbitrar(self,msg,obj=None):
         # Cuando se reciba un mensaje 102 se tiene que enviar el tablero y se envia el código de 
         # mensaje 202
         #100 -- Reinicio partida
         #101 -- Fin juego
+        #102 -- dibujarTablero
         #103 -- Envio de coordenadas
 
         # cuando haya acabado la partida esFin() == True
@@ -36,55 +33,37 @@ class Arbitro:
         #         salir (Cliente) al jugador que no quiere y el otro se quede esperando (un tiempo)
         #         y si no se encuentra a nadie se dice que ha finalizado la partida
         #       - Si ambos quieren salir mandar salir (Cliente)
-        if(msg=="102"):
-            return self.tablero.dibujarTablero()
+        fin=0
         if(msg=="100"):
-            return self.tablero.reiniciar()
+            fin, obj = self.tablero.reiniciar()
         if(msg=="101"):
-            return self.tablero.esFin()
+            fin, obj = self.tablero.esFin()
         if(msg=="103"):
-            return self.tablero.comprobarMovimiento()
-             
-    def turnoActual(self):
+            fin, obj = self.tablero.dibujarTablero()
+        if(msg=="104"):
+            fin, obj = self.tablero.realizarMovimiento()
+        # Se devuelve el codigo de respuesta, el objeto y el turno1
+        return fin, obj, self.turno
+            
+
+    def realizarMovimiento(self, movimiento):
         """
-        Devuelve al servidor el turno actual.
+        Coloca la ficha en la posición indicada por movimiento.
+        Cambia de turno.
 
-        Return:
-        turno -- Turno actual
+        Parámetros:
+        movimiento -- Coordenadas [x,y] del destino del movimiento
         """
-        return self.turno
-
-    def cambiarTurno(self):
-        """
-        Cambia el turno del jugador.
-        """
-        if(self.turnoActual == 1):
-            self.turno = 2
-        else:
-            self.turno = 1
-
-    def esFin(self):
-        """
-        Obtiene el tablero y busca jugadas ganadoras o si el tablero está lleno.
-
-        Return:
-        Bool -- True si se ha acabado el juego, False si no
-        """
-        tab = self.tablero.getTablero()
-
-        if(tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
-            return True
-
-        if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
-            return True
-
-        if(tab[0][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[1][1] == tab[0][2]):
-            return True
-
-        if(self.tablero.estaLleno()):
-            return True
-
-        self.fin = False
+        correcto = self.comprobarMovimiento()
+        if ( correcto == 1 ):
+            self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
+            self.cambiarTurno()
+        if ( correcto == 2 ):
+            # TODO Volver a solicitar movimiento al mismo jugador
+            pass
+        if ( correcto == 0 ):
+            pass
+            # TODO meter lo del reinicio
 
     def comprobarMovimiento(self, mov):
         """
@@ -109,28 +88,14 @@ class Arbitro:
 
         # Si el movimiento es correcto
         if (movimiento[0] in posibilidades & movimiento[1] in posibilidades & tab[movimiento[0]][movimiento[1]] == 0):
-            self.realizarMovimiento(movimiento)
-            self.esFin()
+            return 1 # Movimiento correcto
 
-            # Si es fin de partida se consulta si se quiere reiniciar
             if (self.esFin()):
+                # TODO Si es fin de partida se consulta si se quiere reiniciar
                 return 0 # Mensaje consultar reinicio
 
-        # Si el movimiento es incorrecto se manda un mensaje al cliente para volver
-        # a solicitarlo
-        else:
-            return '203'    # Mirar
-
-    def realizarMovimiento(self, movimiento):
-        """
-        Coloca la ficha en la posición indicada por movimiento.
-        Cambia de turno.
-
-        Parámetros:
-        movimiento -- Coordenadas [x,y] del destino del movimiento
-        """
-        self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-        self.cambiarTurno()
+        else: # Movimiento incorrecto
+            return 2
 
     def reiniciar(self):
         """
@@ -145,3 +110,47 @@ class Arbitro:
         self.turno = 1
 
    
+    def esFin(self):
+        """
+        Obtiene el tablero y busca jugadas ganadoras o si el tablero está lleno.
+
+        Return:
+        Bool -- True si se ha acabado el juego, False si no
+        """
+        tab = self.tablero.getTablero()
+
+        if(tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
+            return True
+
+        if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
+            return True
+
+        if(tab[0][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[1][1] == tab[0][2]):
+            return True
+
+        if(self.tablero.estaLleno()):
+            return True
+
+        self.fin = False
+        return False
+
+    def turnoActual(self):
+        """
+        Devuelve al servidor el turno actual.
+
+        Return:
+        turno -- Turno actual
+        """
+        return self.turno
+
+    def cambiarTurno(self):
+        """
+        Cambia el turno del jugador.
+        """        
+        if(self.turnoActual == 1):
+            self.turno = 2
+        else:
+            self.turno = 1
+
+    def dibujarTablero():
+        return "202", self.tablero.dibujarTablero()
