@@ -1,7 +1,6 @@
 from Tablero import Tablero
 import time
 
-
 class Arbitro:
     def __init__(self, jugador1, jugador2):
         """
@@ -24,18 +23,28 @@ class Arbitro:
         Mientras no se haya terminado el juego, se queda a la espera de mensajes.
         """
         
-        # Cuando se reciba un mensaje 102 se tiene que enviar el tablero y el código de 
+        # Cuando se reciba un mensaje 102 se tiene que enviar el tablero y se envia el código de 
         # mensaje 202
+        #100 -- Reinicio partida
+        #101 -- Fin juego
+        #103 -- Envio de coordenadas
 
         # cuando haya acabado la partida esFin() == True
         #   llamar solicitud reinicio de InterfazJugador()
-        #       - Si ambos quieren reiniciar (ambos codigo 100) llamar reiniciar()
+        #       - Si ambos quieren reiniciar (ambos código 100) llamar reiniciar()
         #       - Si uno quiere reiniciar y el otro no enviar un código para mandar
         #         salir (Cliente) al jugador que no quiere y el otro se quede esperando (un tiempo)
         #         y si no se encuentra a nadie se dice que ha finalizado la partida
         #       - Si ambos quieren salir mandar salir (Cliente)
-        if(msg=="202"): 
-
+        if(msg=="102"):
+            return self.tablero.dibujarTablero()
+        if(msg=="100"):
+            return self.tablero.reiniciar()
+        if(msg=="101"):
+            return self.tablero.esFin()
+        if(msg=="103"):
+            return self.tablero.comprobarMovimiento()
+             
     def turnoActual(self):
         """
         Devuelve al servidor el turno actual.
@@ -121,7 +130,6 @@ class Arbitro:
         movimiento -- Coordenadas [x,y] del destino del movimiento
         """
         self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-
         self.cambiarTurno()
 
     def reiniciar(self):
@@ -129,7 +137,7 @@ class Arbitro:
         Se reinicia el juego.
         """
         # TODO julen: yo cambiaría este bucle por un método iniciarTablero en tablero
-
+        
         for i in range(3):
             for j in range(3):
                 self.tablero.setFicha(0, i, j)

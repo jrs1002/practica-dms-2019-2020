@@ -3,6 +3,7 @@ from socket import *
 import time
 from _thread import *
 from InterfazJugador import InterfazJugador
+
 #FUNCIONES
 def ini():
     host = "0.0.0.0"
@@ -70,9 +71,6 @@ def inicializarJugador(s):
         idJugador = int(obj)
         return InterfazJugador(idJugador)
 
-
-
-
 #VARIABLES GLOBALES
 exit=False      # Si el cliente envia salir, exit se pone en true y el
                 # el programa termina
@@ -100,9 +98,7 @@ def main():
         mens, obj = interpretarMensaje(recibir(s))
         mens, obj = jugador.jugar(mens,obj)
         # if mensaje = finalizar : exit = True
-        enviar(mens+"---"+obj)
-
-        
+        enviar(s,mens+"---"+obj)
 
     print("\nLo lamentamos, ha ocurrido un error.")
     print("Cerrando la ventana en 5 seg")

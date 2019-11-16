@@ -1,12 +1,12 @@
 import time
 
-
 class InterfazJugador:
     """
     Mensajes Cliente a Servidor:
         100 -- Reinicio partida
         101 -- Fin juego
         102 -- Solicitar tablero
+        103 -- Envio de coordenadas 
 
         Mensajes Servidor a Cliente:
         202 -- Envío del dibujo del tablero
@@ -38,17 +38,14 @@ class InterfazJugador:
         fin -- Objeto a devolver
         """
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
-
-        # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
-      
-        fin = 0 # Si no se requiere ningún objeto se devolverá 0
+        if (msg == '202'): self.imprimirTablero(obj)      
         
-        if (msg == '202'): self.imprimirTablero(obj)
+        # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
         if (msg == '203'): fin = self.solicitarMov()
-
+        
+        fin = 0 # Si no se requiere ningún objeto se devolverá 0
         return fin
 
-    
     def imprimirTablero(self,_tablero):
         """
         Muestra por pantalla el  tablero.
@@ -58,7 +55,6 @@ class InterfazJugador:
         """
         self.tablero = _tablero
         print(_tablero)
-
 
     def solicitarMov(self):
         """

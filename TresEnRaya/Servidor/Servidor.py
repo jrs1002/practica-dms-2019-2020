@@ -41,7 +41,6 @@ def recibir(cliente):
         except:
             input("Pulse para refrescar")
 
-
 def enviarEspecial(cliente):
     global lista_de_clientes,client
     client = lista_de_clientes.pop()
@@ -114,8 +113,6 @@ def main():
     while not exit:
         # Meter lo de arbitrar
         pass
-
-
 
 #Llamada al main
 main()
