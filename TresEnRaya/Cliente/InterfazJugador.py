@@ -43,7 +43,6 @@ class InterfazJugador:
         if (msg == '202'): fin, obj = self.imprimirTablero(obj)      
         # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
         if (msg == '203'): fin, obj = self.solicitarMov()
-        
         return fin, obj
 
     def imprimirTablero(self,_tablero):

@@ -55,13 +55,13 @@ def recibirEspecial(s):
 
 def interpretarMensaje(msg):
     if (len(msg) > 3):
-        msg = msg.split("---")
+        msg = msg.split("***")
         return msg[0], msg[1]
 
 def inicializarJugador(s):
 
     print(recibir(s))   # Se pregunta al jugador si quiere inciar el juego
-    msg ="102---"       # Codigo del mensaje
+    msg ="102***"       # Codigo del mensaje
     msg += input()      # Respuesta del jugador 1 si 0 no
     enviar(s,msg)
 
@@ -86,7 +86,7 @@ def main():
     print("\nConexión establecida\nEl servidor es:", host+":"+str(port)+"\n")
 
     jugador = inicializarJugador(s)
-    
+
 
     while not exit:   # Necesarios para que los hilos no mueran
         """
@@ -95,11 +95,11 @@ def main():
         pasarselo a jugador
         enviar respuesta
         """
-        input("Pulse para continuar")
         mens, obj = interpretarMensaje(recibir(s))
+        print(mens, obj)
         mens, obj = jugador.jugar(mens,obj)
         # if mensaje = finalizar : exit = True
-        enviar(s,mens+"---"+obj)
+        enviar(s,mens+"***"+obj)
 
     print("\nLo lamentamos, ha ocurrido un error.")
     print("Cerrando la ventana en 5 seg")

@@ -39,7 +39,8 @@ def recibir(cliente):
           return reply.decode("UTF-8")
           break
         except:
-            input("Pulse para refrescar")
+            print("\nRecv: No responde, se intentará en 5 seg\n")
+            time.sleep(5)
 
 def enviarEspecial(cliente):
     global lista_de_clientes,client
@@ -50,12 +51,12 @@ def enviar_Mensaje(mensaje,cliente): #Para enviar mensajes Servidor->Cliente
         try:
             cliente.send(mensaje.encode("UTF-8"))
         except:
-            print("\nNo responde, se intentará en 5 seg\n")
+            print("\nSend: No responde, se intentará en 5 seg")
             time.sleep(5)
 
 def interpretarMensaje(msg):
     if (len(msg) > 3):
-        msg = msg.split("---")
+        msg = msg.split("***")
         return msg[0], msg[1]
 
 def inicializarJugador(cliente, id):
@@ -73,7 +74,7 @@ def inicializarJugador(cliente, id):
     if (cod == "102"):
         if obj == "1":
             print("El jugador " + str(id) + " quiere jugar, se le envía el código de jugador")
-            enviar_Mensaje("201---"+str(id),cliente) 
+            enviar_Mensaje("201***"+str(id),cliente) 
         else: 
             # TODO añadir finalización de conexión
             print("El jugador " + str(id) + " no quiere jugar, finalizar conexión")
@@ -110,10 +111,12 @@ def main():
     
     arbitro = Arbitro(1,2)    
 
+    # INICIA EL JUEGO
     cliente = cliente1 # Empieza jugando el jugador1
     mens,obj,dest = arbitro.arbitrar("103") 
-    enviar_Mensaje(mens+"---"+obj,cliente)
-    
+    enviar_Mensaje(mens+"***"+obj,cliente)
+
+
     while not exit:   # Necesarios para que los hilos no mueran
         """
         Aqui tendremos que meter la comunicación con jugador
@@ -127,7 +130,7 @@ def main():
 
         # Cuando cambie dest, se cambia el turno
         cliente = cliente1 if dest==1 else cliente2
-        enviar_Mensaje(mens+"---"+obj,cliente)
+        enviar_Mensaje(mens+"***"+obj,cliente)
 
 #Llamada al main
 main()

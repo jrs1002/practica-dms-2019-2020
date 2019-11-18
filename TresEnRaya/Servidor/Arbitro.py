@@ -18,7 +18,7 @@ class Arbitro:
         self.turno = 1              # Turno actual
         self.mensaje = None         # Último mensaje recibido
 
-    def arbitrar(self,msg,obj=None):
+    def arbitrar(self,msg,elem=None):
         # Cuando se reciba un mensaje 102 se tiene que enviar el tablero y se envia el código de 
         # mensaje 202
         #100 -- Reinicio partida
@@ -35,13 +35,14 @@ class Arbitro:
         #       - Si ambos quieren salir mandar salir (Cliente)
         fin=0
         if(msg=="100"):
-            fin, obj = self.tablero.reiniciar()
+            fin, obj = self.reiniciar()
         if(msg=="101"):
-            fin, obj = self.tablero.esFin()
+            fin = "202" # Se solicita el movimiento
+            obj = "0" 
         if(msg=="103"):
-            fin, obj = self.tablero.dibujarTablero()
+            fin, obj = self.dibujarTablero()
         if(msg=="104"):
-            fin, obj = self.tablero.realizarMovimiento()
+            fin, obj = self.realizarMovimiento(elem)
         # Se devuelve el codigo de respuesta, el objeto y el turno1
         return fin, obj, self.turno
             
@@ -152,5 +153,5 @@ class Arbitro:
         else:
             self.turno = 1
 
-    def dibujarTablero():
+    def dibujarTablero(self):
         return "202", self.tablero.dibujarTablero()
