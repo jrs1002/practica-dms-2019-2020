@@ -36,15 +36,24 @@ class Arbitro:
         fin=0
         if(msg=="100"):
             fin, obj = self.reiniciar()
+        
         if(msg=="101"):
-            fin = "203" # Se solicita el movimiento
-            obj = "0" 
-
+            fin = "203"
+            obj = "0"
+        
         if(msg=="103"):
             fin, obj = self.dibujarTablero()
+        
         if(msg=="104"):
             fin, obj = self.realizarMovimiento(elem)
+            
+
+        if(msg=='105'):
+            self.cambiarTurno()
+            fin, obj = self.dibujarTablero()
+
         # Se devuelve el codigo de respuesta, el objeto y el turno1
+        print(self.turno)
         return fin, obj, self.turno
             
 
@@ -56,19 +65,24 @@ class Arbitro:
         Parámetros:
         movimiento -- Coordenadas [x,y] del destino del movimiento
         """
-        movimiento = [int(mov[0]),int(mov[1])]
+        movimiento = [int(mov[0])-1,int(mov[1])-1]
+        
         correcto = self.comprobarMovimiento(movimiento)
         if ( correcto == 1 ):
             print("movimiento correctooooooooo")
+
             self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-            self.cambiarTurno()
-            
+
+            # Movimiento correcto y actualizado en el tablero
+            return "204",self.tablero.dibujarTablero()
+
         if ( correcto == 2 ):
             print("movimiento incorrectooooooo")
+
             # TODO Volver a solicitar movimiento al mismo jugador
             pass
         if ( correcto == 0 ):
-            print("tablero llenooooooooooooooo")
+            print("Celda ocupada")
             pass
             # TODO meter lo del reinicio
 
@@ -94,9 +108,10 @@ class Arbitro:
         if ( (movimiento[0] in posibilidades) and 
              (movimiento[1] in posibilidades) and
              (tab[movimiento[0]][movimiento[1]] == 0) ):
-            if (self.esFin()):
+
+            #if (self.esFin()):
                 # TODO Si es fin de partida se consulta si se quiere reiniciar
-                return 0 # Mensaje consultar reinicio
+             #   return 0 # Mensaje consultar reinicio
             return 1 # Movimiento correcto
 
         else: # Movimiento incorrecto
@@ -124,7 +139,7 @@ class Arbitro:
         """
         tab = self.tablero.getTablero()
 
-        if(tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
+        if( tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
             return True
 
         if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
@@ -152,7 +167,7 @@ class Arbitro:
         """
         Cambia el turno del jugador.
         """        
-        if(self.turnoActual == 1):
+        if(self.turno == 1):
             self.turno = 2
         else:
             self.turno = 1

@@ -2,5 +2,7 @@ from Tablero import Tablero
 
 tablero = Tablero()
 
-x = tablero.dibujarTablero()
-print(x)
+print(tablero.dibujarTablero())
+
+tablero.setFicha(1,1,1)
+print(tablero.dibujarTablero())

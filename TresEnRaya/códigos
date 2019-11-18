@@ -6,8 +6,8 @@
 	Cliente --> Servidor				Servidor --> Cliente 			
 
 100: reiniciar		OBJ: 0			200: 
-101: done			OBJ: 0			201: inicializarJugador OBJ: numJugador 
-102: quiero jugar 	OBJ: 1 o 2		202: imprimirTablero 	OBJ: Tablero	
-103:  								203: solicitarMov       OBJ: 0
-104: movimiento		OBJ: mov 		204: 
-
+101: pintado		OBJ: 0 			201: inicializarJugador OBJ: numJugador 
+102: quiero jugar 	OBJ: 1 o 2		202: devolver tablero   OBJ: Tablero	
+103: solicitarTablero				203: solicitarMov       OBJ: 
+104: movimiento		OBJ: mov 		204: movimientoCorrect  OBJ: Tablero
+105: tableroActualizado

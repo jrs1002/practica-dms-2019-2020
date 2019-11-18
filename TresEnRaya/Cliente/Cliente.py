@@ -100,6 +100,8 @@ def main():
         # if mensaje = finalizar : exit = True
         enviar(s,mens+"***"+obj)
 
+
+
     print("\nLo lamentamos, ha ocurrido un error.")
     print("Cerrando la ventana en 5 seg")
     time.sleep(10)

@@ -32,19 +32,18 @@ class Tablero:
         x = '    1    2    3 \n'
         for i in range(3):
             x += '   +---+---+---+\n' + str(i+1) +  '  | '
-            for j in range(1, 3):
+            for j in range(3):
 
                 if(self.tab[i][j] == 0):
                     x += ' '
 
                 elif(self.tab[i][j] == 1):
                     x += 'X'
-
                 else:
                     x += 'O'
                 x += ' | '
 
-            x += '  |\n'
+            x += '\n'
         x += '   +---+---+---+'
         return x    
 

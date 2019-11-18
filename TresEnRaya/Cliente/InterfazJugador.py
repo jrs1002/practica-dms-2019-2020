@@ -22,7 +22,6 @@ class InterfazJugador:
         """
         self.jugador = _jugador
         self.ficha = 'X' if (_jugador == 1 ) else 'O'
-        self.tablero = None # Se almacena el último tablero recibido del servidor
 
         print('Eres el jugador' + str(self.jugador) + ' con ficha ' + self.ficha + '.')
 
@@ -40,20 +39,27 @@ class InterfazJugador:
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
         # Si no se requiere ningún objeto se devolverá 0
         
-        if (msg == '202'): fin, obj = self.imprimirTablero(obj)      
+        if (msg == '202'): 
+            fin, obj = self.imprimirTablero(obj)      
+        
         # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
-        if (msg == '203'): fin, obj = self.solicitarMov()
+        if (msg == '203'): 
+            fin, obj = self.solicitarMov()
+        
+        if (msg == '204'): 
+            fin, obj = self.imprimirTablero(obj)  
+            fin = '105'
+
         return fin, obj
 
-    def imprimirTablero(self,_tablero):
+    def imprimirTablero(self,tablero):
         """
         Muestra por pantalla el  tablero.
 
         Parámetros:
         _tablero -- Representación del tablero
         """
-        self.tablero = _tablero
-        print(_tablero)
+        print(tablero)
 
         return "101","0" # Código DONE (tablero impreso)
 

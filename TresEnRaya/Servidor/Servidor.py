@@ -130,8 +130,15 @@ def main():
         # if mens = finalizar : exit = True
 
         # Cuando cambie dest, se cambia el turno
-        cliente = cliente1 if dest==1 else cliente2
+
+        if dest == 1:
+            cliente = cliente1 
+        else:
+            cliente = cliente2
+        print(obj)
         enviar_Mensaje(mens+"***"+obj,cliente)
+
+    socket.close()
 
 #Llamada al main
 main()
