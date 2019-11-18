@@ -113,8 +113,8 @@ def main():
 
     # INICIA EL JUEGO
     cliente = cliente1 # Empieza jugando el jugador1
-    mens,obj,dest = arbitro.arbitrar("103") 
-    enviar_Mensaje(mens+"***"+obj,cliente)
+    mens,obj,dest = arbitro.arbitrar("103") # Le muestra el tablero
+    enviar_Mensaje(mens+"***"+obj,cliente)  # Le envia un 202 tablero
 
 
     while not exit:   # Necesarios para que los hilos no mueran
@@ -124,8 +124,9 @@ def main():
         pasarselo a jugador
         enviar respuesta
         """
-        mens, obj = interpretarMensaje(recibir(s))
-        mens, obj, dest = arbitro.jugar(mens,obj)
+        mens, obj = interpretarMensaje(recibir(cliente))
+        print(mens,obj)
+        mens, obj, dest = arbitro.arbitrar(mens,obj)
         # if mens = finalizar : exit = True
 
         # Cuando cambie dest, se cambia el turno

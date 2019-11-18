@@ -37,8 +37,9 @@ class Arbitro:
         if(msg=="100"):
             fin, obj = self.reiniciar()
         if(msg=="101"):
-            fin = "202" # Se solicita el movimiento
+            fin = "203" # Se solicita el movimiento
             obj = "0" 
+
         if(msg=="103"):
             fin, obj = self.dibujarTablero()
         if(msg=="104"):
@@ -47,7 +48,7 @@ class Arbitro:
         return fin, obj, self.turno
             
 
-    def realizarMovimiento(self, movimiento):
+    def realizarMovimiento(self, mov):
         """
         Coloca la ficha en la posición indicada por movimiento.
         Cambia de turno.
@@ -55,18 +56,23 @@ class Arbitro:
         Parámetros:
         movimiento -- Coordenadas [x,y] del destino del movimiento
         """
-        correcto = self.comprobarMovimiento()
+        movimiento = [int(mov[0]),int(mov[1])]
+        correcto = self.comprobarMovimiento(movimiento)
         if ( correcto == 1 ):
+            print("movimiento correctooooooooo")
             self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
             self.cambiarTurno()
+            
         if ( correcto == 2 ):
+            print("movimiento incorrectooooooo")
             # TODO Volver a solicitar movimiento al mismo jugador
             pass
         if ( correcto == 0 ):
+            print("tablero llenooooooooooooooo")
             pass
             # TODO meter lo del reinicio
 
-    def comprobarMovimiento(self, mov):
+    def comprobarMovimiento(self, movimiento):
         """
         Obtiene un movimiento y comprueba si este es válido.
         Para ello tiene en cuenta el jugador que ha enviado el movimiento 
@@ -76,24 +82,22 @@ class Arbitro:
         203 -- Movimiento incorrecto
 
         Parámetros:
-        mov -- String "xy" del destino del movimiento
+        mov -- int "xy" del destino del movimiento
 
         Return: 
-        String -- Mensaje que envía el Servidor al Cliente
+        int -- codigo de movimiento
         """
-        # Convertimos el string movimiento a un array 
-        movimiento = [int(mov[0]),int(mov[1])]
-
         tab = self.tablero.getTablero()
         posibilidades = [0, 1, 2]
 
         # Si el movimiento es correcto
-        if (movimiento[0] in posibilidades & movimiento[1] in posibilidades & tab[movimiento[0]][movimiento[1]] == 0):
-            return 1 # Movimiento correcto
-
+        if ( (movimiento[0] in posibilidades) and 
+             (movimiento[1] in posibilidades) and
+             (tab[movimiento[0]][movimiento[1]] == 0) ):
             if (self.esFin()):
                 # TODO Si es fin de partida se consulta si se quiere reiniciar
                 return 0 # Mensaje consultar reinicio
+            return 1 # Movimiento correcto
 
         else: # Movimiento incorrecto
             return 2

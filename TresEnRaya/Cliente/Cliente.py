@@ -96,7 +96,6 @@ def main():
         enviar respuesta
         """
         mens, obj = interpretarMensaje(recibir(s))
-        print(mens, obj)
         mens, obj = jugador.jugar(mens,obj)
         # if mensaje = finalizar : exit = True
         enviar(s,mens+"***"+obj)

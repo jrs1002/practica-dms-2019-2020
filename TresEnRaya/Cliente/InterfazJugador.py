@@ -67,7 +67,7 @@ class InterfazJugador:
         """
         mov =  input('Introduce la fila: ')
         mov += input('Introduce la columna: ')
-        return "103", mov
+        return "104", mov
 
     #Meter en jugar los mensajes
     def solicitudReinicio(self):
