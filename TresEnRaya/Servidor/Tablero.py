@@ -54,9 +54,8 @@ class Tablero:
         Return:
         lleno -- Booleano que indica si el tablero está lleno o no
         """
-        lleno = True
         for i in range(3):
-            for j in range(1, 3):
-                 if(self.tab[i][j] == 0):
-                     lleno = False
-        return lleno
+            for j in range(3):
+                if(self.tab[i][j] == 0):
+                    return False
+        return True

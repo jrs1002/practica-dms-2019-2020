@@ -9,7 +9,9 @@ import sys
 from Tablero import Tablero
 from Arbitro import Arbitro
 
+
 #FUNCIONES
+
 def ini():
     host = "0.0.0.0"
     port = 9494
@@ -125,20 +127,30 @@ def main():
         enviar respuesta
         """
         mens, obj = interpretarMensaje(recibir(cliente))
-        print(mens,obj)
+        
+        print("Recibido",mens,obj)
+        
         mens, obj, dest = arbitro.arbitrar(mens,obj)
-        # if mens = finalizar : exit = True
 
-        # Cuando cambie dest, se cambia el turno
-
-        if dest == 1:
-            cliente = cliente1 
+        if (mens == "200"):        
+            enviar_Mensaje(mens+"***"+obj,cliente1)     
+            enviar_Mensaje(mens+"***"+obj,cliente2)     
+            exit = True
+        elif dest == 1:
+            print("mens a cliente1")
+            cliente = cliente1
+            enviar_Mensaje(mens+"***"+obj,cliente)
         else:
+            print("mens a cliente2")
             cliente = cliente2
-        print(obj)
-        enviar_Mensaje(mens+"***"+obj,cliente)
+            enviar_Mensaje(mens+"***"+obj,cliente)
+            
+    print("\nLos jugadores han terminado de jugar\n")
+    time.sleep(5)
+    s.close()
+    s = None
+    __del__(self)
 
-    socket.close()
 
 #Llamada al main
 main()

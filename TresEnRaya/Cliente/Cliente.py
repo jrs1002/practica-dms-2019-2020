@@ -78,6 +78,7 @@ client = ""
 
 #MAIN
 def main():
+    global exit
 
     host, port = ini()
     s = crearSocket()
@@ -97,15 +98,18 @@ def main():
         """
         mens, obj = interpretarMensaje(recibir(s))
         mens, obj = jugador.jugar(mens,obj)
-        # if mensaje = finalizar : exit = True
-        enviar(s,mens+"***"+obj)
+        if (mens == '100'): 
+            exit = True
+        else:
+            enviar(s,mens+"***"+obj)
 
 
 
-    print("\nLo lamentamos, ha ocurrido un error.")
-    print("Cerrando la ventana en 5 seg")
-    time.sleep(10)
-
+    print("\nTe esperamos pronto!")
+    time.sleep(5)
+    s.close()
+    s = None
+    
 main()
 
 

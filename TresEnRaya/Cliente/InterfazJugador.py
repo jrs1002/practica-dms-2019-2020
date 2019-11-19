@@ -1,17 +1,6 @@
 import time
 
 class InterfazJugador:
-    """
-    Mensajes Cliente a Servidor:
-        100 -- Reinicio partida
-        101 -- Fin juego
-        102 -- Solicitar tablero
-        103 -- Envio de coordenadas 
-
-        Mensajes Servidor a Cliente:
-        202 -- Envío del dibujo del tablero
-        203 -- Movimiento incorrecto
-    """
 
     def __init__(self, _jugador):
         """
@@ -38,12 +27,17 @@ class InterfazJugador:
         """
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
         # Si no se requiere ningún objeto se devolverá 0
-        
+        if (msg == '200'):
+            self.mostrarResultado(obj)
+            return '100','0'
+            
         if (msg == '202'): 
             fin, obj = self.imprimirTablero(obj)      
         
         # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar   
         if (msg == '203'): 
+            if (obj == '1'):
+                print("\nMovimiento incorrecto, introduzca un nuevo movimiento\n")
             fin, obj = self.solicitarMov()
         
         if (msg == '204'): 
@@ -51,6 +45,15 @@ class InterfazJugador:
             fin = '105'
 
         return fin, obj
+
+    def mostrarResultado(self,obj):
+        if (obj == "0"):
+            print("\n****** HAS EMPATADO ******\n")
+        elif (obj == str(self.jugador)):
+            print("\n****** HAS GANADO  ******\n")
+        else:
+            print("\n****** HAS PERDIDO  ******\n")
+
 
     def imprimirTablero(self,tablero):
         """
@@ -75,15 +78,14 @@ class InterfazJugador:
         mov += input('Introduce la columna: ')
         return "104", mov
 
-    #Meter en jugar los mensajes
+    """
     def solicitudReinicio(self):
-        """
         Una vez se ha terminado el juego se pregunta si se quiere reiniciar
         Si no se quiere reiniciar, se finaliza el juego
 
         Return: 
         String -- Mensaje que envía el Cliente al Servidor
-        """
+    
         print('El juego ha finalizado.')
         self.imprimirTablero(self.tablero)
 
@@ -96,3 +98,4 @@ class InterfazJugador:
             return 100
         else:
             return 101
+    """

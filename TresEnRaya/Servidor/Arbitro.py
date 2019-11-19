@@ -14,7 +14,6 @@ class Arbitro:
         self.jugador1 = jugador1    # Primer jugador
         self.jugador2 = jugador2    # Segundo jugador
         self.tablero = Tablero()    # Tablero en el que se trabaja
-        self.fin = False            # Juego finalizado
         self.turno = 1              # Turno actual
         self.mensaje = None         # Último mensaje recibido
 
@@ -46,9 +45,16 @@ class Arbitro:
         
         if(msg=="104"):
             fin, obj = self.realizarMovimiento(elem)
-            
+
 
         if(msg=='105'):
+
+            fin = self.esFin()
+            if ( fin == self.turno):
+                return  "200", str(self.turno), self.turno # Codigo fin ganando
+            elif (fin == "0"):
+                return "200", "0" ,self.turno# Codigo fin empate
+
             self.cambiarTurno()
             fin, obj = self.dibujarTablero()
 
@@ -69,18 +75,19 @@ class Arbitro:
         
         correcto = self.comprobarMovimiento(movimiento)
         if ( correcto == 1 ):
-            print("movimiento correctooooooooo")
 
             self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
+            
+
 
             # Movimiento correcto y actualizado en el tablero
             return "204",self.tablero.dibujarTablero()
 
         if ( correcto == 2 ):
             print("movimiento incorrectooooooo")
-
             # TODO Volver a solicitar movimiento al mismo jugador
-            pass
+            return "203", "1"
+
         if ( correcto == 0 ):
             print("Celda ocupada")
             pass
@@ -108,10 +115,6 @@ class Arbitro:
         if ( (movimiento[0] in posibilidades) and 
              (movimiento[1] in posibilidades) and
              (tab[movimiento[0]][movimiento[1]] == 0) ):
-
-            #if (self.esFin()):
-                # TODO Si es fin de partida se consulta si se quiere reiniciar
-             #   return 0 # Mensaje consultar reinicio
             return 1 # Movimiento correcto
 
         else: # Movimiento incorrecto
@@ -121,12 +124,7 @@ class Arbitro:
         """
         Se reinicia el juego.
         """
-        # TODO julen: yo cambiaría este bucle por un método iniciarTablero en tablero
-        
-        for i in range(3):
-            for j in range(3):
-                self.tablero.setFicha(0, i, j)
-        self.fin = False
+        self.tablero = Tablero()        
         self.turno = 1
 
    
@@ -139,20 +137,32 @@ class Arbitro:
         """
         tab = self.tablero.getTablero()
 
-        if( tab[0][0] == tab[0][1] == tab[0][2] | tab[1][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[2][1] == tab[2][2]):
-            return True
+        # Líneas horizontales
+        if(tab[0][0] == tab[0][1] == tab[0][2] == self.turno):
+            return self.turno
+        if(tab[1][0] == tab[1][1] == tab[1][2] == self.turno): 
+            return self.turno
+        if(tab[2][0] == tab[2][1] == tab[2][2]  == self.turno ):
+            return self.turno
 
-        if(tab[0][0] == tab[1][0] == tab[2][0] | tab[0][1] == tab[1][1] == tab[2][1] | tab[0][2] == tab[1][2] == tab[2][2]):
-            return True
+        # Líneas verticales
+        if(tab[0][0] == tab[1][0] == tab[2][0]  == self.turno):
+            return self.turno
+        if(tab[0][1] == tab[1][1] == tab[2][1]  == self.turno):
+            return self.turno
+        if(tab[0][2] == tab[1][2] == tab[2][2]  == self.turno ):
+            return self.turno
 
-        if(tab[0][0] == tab[1][1] == tab[1][2] | tab[2][0] == tab[1][1] == tab[0][2]):
-            return True
+        # Diagonales
+        if(tab[0][0] == tab[1][1] == tab[2][2]  == self.turno):
+            return self.turno
+        if(tab[2][0] == tab[1][1] == tab[0][2]  == self.turno ):
+            return self.turno
 
         if(self.tablero.estaLleno()):
-            return True
+            return "0"
 
-        self.fin = False
-        return False
+        return -1
 
     def turnoActual(self):
         """
