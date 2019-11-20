@@ -1,13 +1,15 @@
+#Imports
 from Tablero import Tablero
 import time
 
+#Clase Arbitro
 class Arbitro:
     def __init__(self, jugador1, jugador2):
         """
         Inicializa el árbitro con dos jugadores que recibe como parámetro.
         Se crea el tablero con el que se trabajará.
 
-        Param:
+        Parámetros:
         jugador1 -- Primer jugador (contiene el código para enviar mensajes)
         jugador2 -- Segundo jugador (contiene el código para enviar mensajes)
         """
@@ -32,6 +34,7 @@ class Arbitro:
         #         salir (Cliente) al jugador que no quiere y el otro se quede esperando (un tiempo)
         #         y si no se encuentra a nadie se dice que ha finalizado la partida
         #       - Si ambos quieren salir mandar salir (Cliente)
+        
         fin=0
         if(msg=="100"):
             fin, obj = self.reiniciar()
