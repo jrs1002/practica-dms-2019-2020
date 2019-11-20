@@ -14,7 +14,7 @@ class Tablero:
         self.tab[posicionX][posicionY] = color
 
     def getTablero(self):
-        """
+        """     
         Devuelve el tablero.
 
         Return:
@@ -24,7 +24,7 @@ class Tablero:
 
     def dibujarTablero(self):
         """
-        Pide el tablero y lo muestra por pantalla.
+        Devuelve la representación del tablero.
 
         Return:
         x -- Representación del tablero
