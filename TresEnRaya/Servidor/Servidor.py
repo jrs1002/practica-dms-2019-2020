@@ -80,7 +80,6 @@ class Servidor:
                 print("El jugador " + str(id) + " no quiere jugar, finalizar conexión")
 
     def __init__(self):
-        self.exit = False      # Utilizada en la desconexion/conexion de clientes
         self.lista_de_clientes = ["2","1"]   # El servidor le asigna un numero a los clientes segun esta lista
         self.client = ""     # Numero del cliente
 
@@ -113,7 +112,7 @@ class Servidor:
         mens,obj,dest = arbitro.arbitrar("103") # Le muestra el tablero
         self.enviar_Mensaje(mens+"***"+obj,cliente)  # Le envia un 202 tablero
 
-        exit = True
+        exit = False
         while not exit:   # Necesarios para que los hilos no mueran
             """
             Aqui tendremos que meter la comunicación con jugador
@@ -121,7 +120,7 @@ class Servidor:
             pasarselo a jugador
             enviar respuesta
             """
-            mens, obj = self.interpretarMensaje(recibir(cliente))
+            mens, obj = self.interpretarMensaje(self.recibir(cliente))
             
             print("Recibido",mens,obj)
             
