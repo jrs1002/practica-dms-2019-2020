@@ -1,6 +1,3 @@
-#!/urs/bin/python
-#-*- coding: utf-8 -*-
-
 #Imports
 from socket import *
 from _thread import *
@@ -12,28 +9,25 @@ from Arbitro import Arbitro
 
 #Clase Servidor
 class Servidor:
-    def ini(self):
+    def __init__(self):
         """
-        Inicializa el puerto y el host.
-
-        Return:
-        host, port 
+        Se inicializan las variables.
         """
-        host = "0.0.0.0"
-        port = 9494
-        return host, port
+        self.s = socket(AF_INET, SOCK_STREAM)
+        self.host = "0.0.0.0"
+        self.port = 9494      
+        self.lista_de_clientes = ["2","1"]   # El servidor le asigna un numero a los clientes segun esta lista
+        self.client = ""     # Numero del cliente
+        self.exit=False
 
-    def crearSocket(self):
+    def __del__(self):
         """
-        Devuelve un nuevo socket siguiendo el esquema del protocolo TCP
-
-        Return:
-        s -- socket
+        Destruye los socket que no son nulos al final de la ejecución.
         """
-        s = socket(AF_INET, SOCK_STREAM)
-        return s
+        if self.s==None: 
+            self.s=None 
 
-    def ligarSocket(self,s, host, port):
+    def ligarSocket(self):
         """
         Relaciona un socket con el puerto y el host.
         
@@ -44,12 +38,12 @@ class Servidor:
         """
         while True:
             try:
-                s.bind((host, port))
+                self.s.bind((self.host, self.port))
                 break
             except error as e:
                 print("ERROR:", e)
 
-    def conexiones(self,s):
+    def conexiones(self):
         """
         Espera por la conexión de clientes.
 
@@ -59,7 +53,7 @@ class Servidor:
         Return:
         cliente,direccion 
         """
-        cliente, direccion = s.accept()
+        cliente, direccion = self.s.accept()
         print("\nConexión establecida.\nEl cliente es:", direccion[0] + ":" + str(direccion[1])+"\n")
         return cliente, direccion
 
@@ -82,9 +76,9 @@ class Servidor:
                 print("\nRecv: No responde, se intentará en 5 seg\n")
                 time.sleep(5)
 
-    def enviarEspecial(self,cliente):
+    def enviarId(self,cliente):
         """
-        Se selecciona un número al cliente pasado y se le envia.
+        Se asgina un número al cliente pasado y se le envia.
 
         Parámetros:
         cliente
@@ -100,11 +94,12 @@ class Servidor:
         mensaje--mensaje que se quiere enviar
         cliente--cliente al que se le quiere enviar el mensaje
         """
-            try:
-                cliente.send(mensaje.encode("UTF-8"))
-            except:
-                print("\nSend: No responde, se intentará en 5 seg")
-                time.sleep(5)
+        try:
+            cliente.send(mensaje.encode("UTF-8"))
+
+        except:
+            print("\nSend: No responde, se intentará en 5 seg")
+            time.sleep(5)
 
     def interpretarMensaje(self,msg): 
         """
@@ -139,30 +134,21 @@ class Servidor:
             else: 
                 print("El jugador " + str(id) + " no quiere jugar, finalizar conexión")
 
-    def __init__(self):
-        """
-        Se inicializan las variables.
-        """
-        self.lista_de_clientes = ["2","1"]   # El servidor le asigna un numero a los clientes segun esta lista
-        self.client = ""     # Numero del cliente
-
     def main(self):
         """
         Main de la clase Servidor
         """
-        host,port = self.ini()
-        s = self.crearSocket()
-        self.ligarSocket(s, host,port)
-        s.listen(2)     #2 clientes
+        self.ligarSocket()
+        self.s.listen(2)     #2 clientes
 
         print("\nEsperando por los clientes")
 
         # Se inicializan los clientes 
-        cliente1,direccion1 = self.conexiones(s)
-        self.enviarEspecial(cliente1)               # Espero conexion del 1 cliente
+        cliente1,direccion1 = self.conexiones()
+        self.enviarId(cliente1)               # Espero conexion del 1 cliente
 
-        cliente2,direccion2 = self.conexiones(s)
-        self.enviarEspecial(cliente2)              # Espero conexion del 2 cliente
+        cliente2,direccion2 = self.conexiones()
+        self.enviarId(cliente2)              # Espero conexion del 2 cliente
 
         # PROBANDO LA CONEXION
         # Le damos el identificador a cada Cliente
@@ -178,8 +164,7 @@ class Servidor:
         #json.dumps(objeto) que te devuelve el str
         self.enviar_Mensaje(mens+"***"+obj,cliente)  # Le envia un 202 tablero
 
-        exit = False
-        while not exit:   # Necesarios para que los hilos no mueran
+        while not self.exit:   # Necesarios para que los hilos no mueran
             """
             Aqui tendremos que meter la comunicación con jugador
             recibir mensaje
@@ -195,7 +180,7 @@ class Servidor:
             if (mens == "200"):        
                 self.enviar_Mensaje(mens+"***"+obj,cliente1)     
                 self.enviar_Mensaje(mens+"***"+obj,cliente2)     
-                exit = True
+                self.exit = True
             elif dest == 1:
                 print("mens a cliente1")
                 cliente = cliente1
@@ -207,18 +192,8 @@ class Servidor:
                 
         print("\nLos jugadores han terminado de jugar\n")
         time.sleep(5)
-        s.close()
-        s = None
-
-    #IMPORTANTE   
-    #Meter socket como atributo de la clase
-    def __del__(self):
-        """
-        Destruye los socket que no son nulos al final de la ejecución.
-        """
-        #Poner los socket que no estan nulos a none.
-        #if s==None: s=None 
-        pass
+        self.s.close()
+        self.s = None
 
 #Creación del Servidor
 servidor = Servidor()

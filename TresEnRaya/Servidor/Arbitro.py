@@ -17,7 +17,6 @@ class Arbitro:
         self.jugador2 = jugador2    # Segundo jugador
         self.tablero = Tablero()    # Tablero en el que se trabaja
         self.turno = 1              # Turno actual
-        self.mensaje = None         # Último mensaje recibido
 
     def arbitrar(self,msg,elem=None):
         # Cuando se reciba un mensaje 102 se tiene que enviar el tablero y se envia el código de 
@@ -36,9 +35,6 @@ class Arbitro:
         #       - Si ambos quieren salir mandar salir (Cliente)
         
         fin=0
-        if(msg=="100"):
-            fin, obj = self.reiniciar()
-        
         if(msg=="101"):
             fin = "203"
             obj = "0"
@@ -49,9 +45,7 @@ class Arbitro:
         if(msg=="104"):
             fin, obj = self.realizarMovimiento(elem)
 
-
         if(msg=='105'):
-
             fin = self.esFin()
             if ( fin == self.turno):
                 return  "200", str(self.turno), self.turno # Codigo fin ganando
@@ -81,24 +75,20 @@ class Arbitro:
 
             self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
             
-
-
             # Movimiento correcto y actualizado en el tablero
             return "204",self.tablero.dibujarTablero()
 
         if ( correcto == 2 ):
-            print("movimiento incorrectooooooo")
+            print("Movimiento incorrecto")
             # TODO Volver a solicitar movimiento al mismo jugador
             return "203", "1"
 
         if ( correcto == 0 ):
             print("Celda ocupada")
-            pass
-            # TODO meter lo del reinicio
 
     def comprobarMovimiento(self, movimiento):
         """
-        Obtiene un movimiento y comprueba si este es válido.
+        Comprueba si el movimiento pasado por parámetros es válido.
         Para ello tiene en cuenta el jugador que ha enviado el movimiento 
         y el estado del tablero.
 
@@ -111,6 +101,8 @@ class Arbitro:
         Return: 
         int -- codigo de movimiento
         """
+        #TODO : RETURN 0????
+        #IMPORTANTE
         tab = self.tablero.getTablero()
         posibilidades = [0, 1, 2]
 
@@ -122,21 +114,13 @@ class Arbitro:
 
         else: # Movimiento incorrecto
             return 2
-
-    def reiniciar(self):
-        """
-        Se reinicia el juego.
-        """
-        self.tablero = Tablero()        
-        self.turno = 1
-
    
     def esFin(self):
         """
         Obtiene el tablero y busca jugadas ganadoras o si el tablero está lleno.
 
         Return:
-        Bool -- True si se ha acabado el juego, False si no
+        int
         """
         tab = self.tablero.getTablero()
 
@@ -186,4 +170,11 @@ class Arbitro:
             self.turno = 1
 
     def dibujarTablero(self):
+        """
+        Devuelve la representación del tablero actual y un mensaje 202 "devolver tablero"
+
+        Return:
+        202 -- mensaje de "devolver tablero"
+        self.tablero.dibujarTablero() -- representación del tablero
+        """ 
         return "202", self.tablero.dibujarTablero()

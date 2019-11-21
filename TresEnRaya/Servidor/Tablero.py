@@ -1,5 +1,9 @@
+#Clase Tablero.
 class Tablero:
     def __init__(self):
+        """
+        Se inicializan las variables.
+        """
         self.tab = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
     def setFicha(self, color, posicionX, posicionY):

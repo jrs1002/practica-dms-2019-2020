@@ -4,9 +4,14 @@ import json
 #Clase mensaje
 class mensaje:
 
-	def __init__(self):
-
-	def convertirEnCadena(self,obj):
+	def __init__(self,code,obj):
+		"""
+        Se inicializan las variables.
+        """
+		self.code = code
+		self.obj=obj
+	
+	def convertirEnCadena(self):
 		"""
         Convierte el objeto pasado en una cadena.
 
@@ -18,7 +23,7 @@ class mensaje:
         """
 		return json.dumps(obj)
 
-	def convertirEnObjeto(self,cadena):
+	def convertirEnObjeto(self):
 		"""
         Convierte la cadena pasada en un objeto.
 
@@ -28,4 +33,5 @@ class mensaje:
         Return:
 		cadena
         """
-		return json.loads(cadena)
+		#return json.loads((self.cod,self.obj)) --> lo convierte en tupla
+		return json.loads(code)
