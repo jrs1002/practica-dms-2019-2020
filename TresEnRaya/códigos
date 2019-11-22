@@ -1,14 +1,13 @@
 
-			Códigos de mensaje Cliente-Servidor
+Códigos de mensaje Cliente-Servidor
 
-	La estructura de mensajes será: codigo---objeto
 
-	Cliente --> Servidor				Servidor --> Cliente 			
+Cliente --> Servidor										Servidor --> Cliente 			
 
-100: fin			OBJ: 0										200: salir del juego
-101: pintado		OBJ: 0 									201: inicializarJugador OBJ: numJugador 
+100: fin			      OBJ: 0							200: salir del juego
+101: pintado		    OBJ: 0 							201: inicializarJugador OBJ: numJugador 
 102: quiero jugar 	OBJ: 1 o 2					202: devolver tablero   OBJ: Tablero	
 103: solicitarTablero										203: solicitarMov       OBJ: (si es 1 es porque es incorrect)
-104: movimiento		OBJ: mov 							204: movimientoCorrect  OBJ: Tablero
+104: movimiento		  OBJ: mov 					  204: movimientoCorrect  OBJ: Tablero
 105: tableroActualizado
 

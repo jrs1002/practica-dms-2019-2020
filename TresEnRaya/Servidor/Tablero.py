@@ -1,7 +1,8 @@
-#Clase Tablero.
+# Clase Tablero.
 class Tablero:
     def __init__(self):
         """
+        Método que inicializa el Servidor.
         Se inicializan las variables.
         """
         self.tab = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -19,7 +20,7 @@ class Tablero:
 
     def getTablero(self):
         """     
-        Devuelve el tablero.
+        Se devuelve el tablero.
 
         Return:
         tab -- Tablero
@@ -28,14 +29,14 @@ class Tablero:
 
     def dibujarTablero(self):
         """
-        Devuelve la representación del tablero.
+        Se devuelve la representación del tablero.
 
         Return:
         x -- Representación del tablero
         """
         x = '    1    2    3 \n'
         for i in range(3):
-            x += '   +---+---+---+\n' + str(i+1) +  '  | '
+            x += '   +---+---+---+\n' + str(i+1) + '  | '
             for j in range(3):
 
                 if(self.tab[i][j] == 0):
@@ -49,11 +50,11 @@ class Tablero:
 
             x += '\n'
         x += '   +---+---+---+'
-        return x    
+        return x
 
     def estaLleno(self):
         """
-        Comprueba si el tablero está lleno o no.
+        Se comprueba si el tablero está lleno o no.
 
         Return:
         lleno -- Booleano que indica si el tablero está lleno o no
