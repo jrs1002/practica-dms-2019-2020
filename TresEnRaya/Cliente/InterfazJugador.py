@@ -17,8 +17,8 @@ class InterfazJugador:
         self.jugador = _jugador
         self.ficha = 'X' if (_jugador == 1) else 'O'
 
-        print('\nEres el jugador ' + str(self.jugador) +
-              ' con ficha ' + self.ficha + '.')
+        print('| Eres el jugador ' + str(self.jugador) +
+              '\t\t|\n|con ficha ' + self.ficha + '\t\t\t|')
 
     def jugar(self, msg, elem=None):
         """
@@ -40,16 +40,18 @@ class InterfazJugador:
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
         # Si no se requiere ningún objeto se devolverá 0
         if (msg == '202'):
+            print("\n\n")
             fin, obj = self.imprimirTablero(elem)
 
         # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar
         if (msg == '203'):
-            if (obj == '1'):
+            if (elem == '1'):
                 print("\nMovimiento incorrecto, introduzca un nuevo movimiento.\n")
             fin, obj = self.solicitarMov()
 
         if (msg == '204'):
             fin, obj = self.imprimirTablero(elem)
+            print("\n\n")
             fin = '105'
 
         return fin, obj
@@ -68,26 +70,47 @@ class InterfazJugador:
         else:
             print("\n****** HAS PERDIDO  ******\n")
 
-    def imprimirTablero(self, _tablero):
+    def imprimirTablero(self, tablero):
         """
         Se muestra por pantalla el tablero.
 
         Parámetros:
         _tablero -- Representación del tablero
         """
-        print(_tablero)
+        x = '    1    2    3 \n'
+        for i in range(3):
+            x += '   +---+---+---+\n' + str(i+1) + '  | '
+            for j in range(3):
 
+                if(tablero[i][j] == 0):
+                    x += ' '
+
+                elif(tablero[i][j] == 1):
+                    x += 'X'
+                else:
+                    x += 'O'
+                x += ' | '
+
+            x += '\n'
+        x += '   +---+---+---+'
+        print(x)
         return "101", "0"  # Código DONE (tablero impreso)
 
     def solicitarMov(self):
         """
         Se solicita al jugador el movimiento.
-        Se devuelve como un string "xy".
 
         Return:
         int -- Código de mensaje
-        mov -- String con el movimiento introducido
+        mov -- Coordenadas xy del movimiento
         """
-        mov = input('Introduce la fila: ')
-        mov += input('Introduce la columna: ')
+        posibles = [1,2,3]
+        while True:
+            x = input('Introduce la fila: ')
+            y = input('Introduce la columna: ')
+            if (int(x) in posibles and int(y) in posibles):
+                break
+            else:
+                print(" ** Movimientos fuera de rango **")
+        mov = [int(x),int(y)]
         return "104", mov

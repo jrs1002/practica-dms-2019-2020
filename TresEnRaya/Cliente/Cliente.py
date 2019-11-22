@@ -40,8 +40,9 @@ class Cliente:
         es correcta, se conecta al servidor.
         """
         while True:
-            print("\nIntentando conectarse a: ",
-                  self.host + ":" + str(self.port))
+            print("\n\n_________________________________")
+            print("| Intentando conectarse a: \t|\n|\t",
+                  self.host + ":" + str(self.port) + "\t\t|")
             try:
                 self.conectarse()
                 break
@@ -80,7 +81,6 @@ class Cliente:
             try:
                 mensaje = Mensaje(cod, obj)
                 cadena = mensaje.convertirEnCadena()
-                print(cadena)
                 self.s.send(cadena.encode("UTF-8"))
                 break
 
@@ -107,7 +107,7 @@ class Cliente:
         # Recibe el identificador del cliente
         self.client = self.s.recv(2048).decode("UTF-8")
 
-        print("\nCliente " + self.client)
+        print("|Cliente " + self.client + "\t\t\t|")
 
     def interpretarMensaje(self, msg):
         """
@@ -120,8 +120,6 @@ class Cliente:
         Return:
         mensaje -- Mensaje interpretado
         """
-        print("\nMensaje recibido: ")
-        print(msg)
         mensaje = Mensaje.convertirEnObjeto(msg)
         return mensaje
 
@@ -133,7 +131,8 @@ class Cliente:
         InterfazJugador(idJugador) -- Instancia de la clase InterfazJugador con 
                                       el jugador correspondiente
         """
-        print(self.recibir())   # Se pregunta al jugador si quiere iniciar el juego
+        print("|-------------------------------|")
+        print("|"+self.recibir()+"\t|")   # Se pregunta al jugador si quiere iniciar el juego
         respuesta = input()
         mensaje = Mensaje("102", str(respuesta))
         cadena = mensaje.convertirEnCadena()
@@ -152,10 +151,11 @@ class Cliente:
         """
         self.intentoConexion()
         self.recibirId()
-        print("\nConexión establecida.")
-        print("\nEl servidor es: ", self.host+":"+str(self.port)+"\n")
+        print("| Conexión establecida.\t\t|")
+        print("| El servidor es: ", self.host+":"+str(self.port)+"\t|")
 
         jugador = self.inicializarJugador()
+        print("|_______________________________|\n\n")
 
         while not self.exit:   # Necesarios para que los hilos no mueran
             """

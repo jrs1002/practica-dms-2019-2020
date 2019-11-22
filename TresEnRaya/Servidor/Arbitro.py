@@ -54,7 +54,6 @@ class Arbitro:
             fin, obj = self.dibujarTablero()
 
         # Se devuelve el codigo de respuesta, el objeto y el turno
-        print(self.turno)
         return fin, obj, self.turno
 
     def realizarMovimiento(self, mov):
@@ -64,24 +63,20 @@ class Arbitro:
         Se cambia de turno.
 
         Parámetros:
-        mov -- String "xy" con el destino del movimiento
+        mov -- Coordenadas xy con el destino del movimiento
         """
-        movimiento = [int(mov[0])-1, int(mov[1])-1]
+        movimiento = [mov[0]-1, mov[1]-1]
 
         correcto = self.comprobarMovimiento(movimiento)
         if (correcto == 1):
             self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
 
             # Movimiento correcto y actualizado en el tablero
-            return "204", self.tablero.dibujarTablero()
+            return "204", self.tablero.getTablero()
 
-        if (correcto == 2):
-            print("\nMovimiento incorrecto.")
-            # TODO Volver a solicitar movimiento al mismo jugador
+        if (correcto == 2 ):
+            # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
             return "203", "1"
-
-        if (correcto == 0):
-            print("\nCelda ocupada.")
 
     def comprobarMovimiento(self, mov):
         """
@@ -90,7 +85,7 @@ class Arbitro:
         y el estado del tablero.
 
         Parámetros:
-        mov -- String [x,y] del destino del movimiento
+        mov -- [x,y] del destino del movimiento
 
         Return: 
         int -- Entero que indica si es correcto o no
@@ -172,4 +167,4 @@ class Arbitro:
         int -- Código del mensaje de "devolver tablero"
         self.tablero.dibujarTablero() -- Representación del tablero
         """
-        return "202", self.tablero.dibujarTablero()
+        return "202", self.tablero.getTablero()

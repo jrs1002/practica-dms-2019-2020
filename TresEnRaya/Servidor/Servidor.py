@@ -53,8 +53,8 @@ class Servidor:
         direccion -- Dirección del cliente
         """
         cliente, direccion = self.s.accept()
-        print("\nConexión establecida.\n"
-        print("El cliente es: ", direccion[0] + ":" + str(direccion[1])+"\n")
+        print("| Conexión establecida.\t\t|")
+        print("| El cliente es:\t\t|\n|\t", direccion[0] + ":" + str(direccion[1])+"\t|")
         return cliente, direccion
 
     def recibir(self, cliente):
@@ -136,7 +136,6 @@ class Servidor:
         Return:
         mensaje -- Mensaje interpretado
         """
-        print(msg)
         mensaje = Mensaje.convertirEnObjeto(msg)
         return mensaje
 
@@ -155,12 +154,12 @@ class Servidor:
 
         if (mensaje.getCode() == "102"):
             if mensaje.getObj() == "1":
-                print("\nEl jugador " + str(id) +
-                      " quiere jugar, se le envía el código de jugador.\n")
+                print("| El jugador " + str(id) +
+                      " quiere jugar.\t|\n| Se le envía el id de jugador.\t|")
                 self.enviar_Mensaje_Codificado("201", str(id), _cliente)
             else:
-                print("\nEl jugador " + str(id) +
-                      " no quiere jugar, finalizar conexión.\n")
+                print("| El jugador " + str(id) +
+                      " no quiere jugar.|\n| Finalizar conexión.\t\t|")
 
     def main(self):
         """
@@ -170,7 +169,7 @@ class Servidor:
         self.ligarSocket()
         self.s.listen(2)  # 2 clientes
 
-        print("\n\n/********************************\\\n   Esperando a los clientes\n\n")
+        print("\n\n_________________________________\n|   Esperando a los clientes\t|")
 
         # Inicialización de los clientes
         cliente1, direccion1 = self.conexiones()
@@ -182,8 +181,9 @@ class Servidor:
         # PROBANDO LA CONEXION
         # Se le da el identificador a cada Cliente
         self.inicializarJugador(cliente1, 1)
+        print("|-------------------------------|")
         self.inicializarJugador(cliente2, 2)
-        print("\n********************************\n\n")
+        print("|_______________________________|\n\n")
         arbitro = Arbitro(1, 2)
 
         # INICIA EL JUEGO
@@ -206,11 +206,9 @@ class Servidor:
                 self.enviar_Mensaje_Codificado(mens, obj, cliente2)
                 self.exit = True
             elif dest == 1:
-                print("\nMensaje a cliente 1.\n")
                 cliente = cliente1
                 self.enviar_Mensaje_Codificado(mens, obj, cliente)
             else:
-                print("\nMensaje a cliente 2.\n")
                 cliente = cliente2
                 self.enviar_Mensaje_Codificado(mens, obj, cliente)
 
