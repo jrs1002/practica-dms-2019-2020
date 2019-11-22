@@ -12,7 +12,7 @@ class InterfazJugador:
         self.jugador = _jugador
         self.ficha = 'X' if (_jugador == 1 ) else 'O'
 
-        print('Eres el jugador' + str(self.jugador) + ' con ficha ' + self.ficha + '.')
+        print('Eres el jugador ' + str(self.jugador) + ' con ficha ' + self.ficha + '.')
 
     def jugar(self, msg, obj = None):
         """

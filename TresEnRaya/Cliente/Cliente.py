@@ -4,6 +4,7 @@ import time
 import json
 from _thread import *
 from InterfazJugador import InterfazJugador
+from Mensaje import Mensaje
 
 #Clase Cliente
 class Cliente:
@@ -61,6 +62,23 @@ class Cliente:
                 print("Se intentará en 5 seg")
                 time.sleep(5)
 
+    def enviar_Mensaje_Codificado(self,cod,obj):
+        """
+        Crea un objeto Mensaje con el código de mensaje y el objeto
+        se lo envia al cliente
+        """
+        while True:
+            try:
+                mensaje = Mensaje(cod,obj)
+                cadena = mensaje.convertirEnCadena()
+                print(cadena)
+                self.s.send(cadena.encode("UTF-8"))
+                break
+
+            except:
+                print("\nSend_esp: No responde, se intentará en 5 seg")
+                time.sleep(5)
+
     def recibir(self):
         """
         Gestiona los mensajes recibidos del Servidor.
@@ -70,9 +88,8 @@ class Cliente:
         """
         while True:
             try:
-              reply = self.s.recv(2048)
-              return reply.decode("UTF-8")
-
+                reply = self.s.recv(2048)
+                return reply.decode("UTF-8")
             except:
                 input("Pulse para refrescar")
 
@@ -93,9 +110,11 @@ class Cliente:
         Return:
         mensaje interpretado
         """
-        if (len(msg) > 3):
-            msg = msg.split("***")
-            return msg[0], msg[1]
+        print("mensaje recibido:")
+        print(msg)
+        mensaje = Mensaje.convertirEnObjeto(msg)
+        return mensaje
+
 
     def inicializarJugador(self):
         """
@@ -105,14 +124,15 @@ class Cliente:
         idJugador --id del jugador correspondiente al cliente.
         """
         print(self.recibir())   # Se pregunta al jugador si quiere inciar el juego
-        msg ="102***"       # Codigo del mensaje
-        msg += input()      # Respuesta del jugador 1 si 0 no
-        self.enviar(msg)
+        respuesta = input()
+        mensaje = Mensaje("102",str(respuesta))
+        cadena = mensaje.convertirEnCadena()
+        self.enviar(cadena)
 
-        msg,obj = self.interpretarMensaje(self.recibir())
+        mensaje = self.interpretarMensaje(self.recibir())
 
-        if(msg=="201"):
-            idJugador = int(obj)
+        if(mensaje.getCode()=="201"):
+            idJugador = int(mensaje.getObj())
             return InterfazJugador(idJugador)
 
     def main(self):
@@ -121,7 +141,7 @@ class Cliente:
         """
         self.intentoConexion()
         self.recibirId()
-        print("\nConexión establecida\nEl servidor es:", self.host+":"+str(self.port)+"\n")
+        print("\nConexión establecida\nEl servidor es:", self.host+":"+str(self.port)+"\n\n\n")
 
         jugador = self.inicializarJugador()
 
@@ -129,14 +149,14 @@ class Cliente:
             """
             Aqui se realiza la comuniación con jugador
             """
-            mens, obj = self.interpretarMensaje(self.recibir())
-            mens, obj = jugador.jugar(mens,obj)
+            mensaje = self.interpretarMensaje(self.recibir())
+            cod, obj = jugador.jugar(mensaje.getCode(),mensaje.getObj())
             #Se convierte el objeto devuelto por jugar a str
             #json.dumps(objeto) que te lo devuelve en str
-            if (mens == '100'): 
+            if (cod == '100'): 
                 self.exit = True
             else:
-                self.enviar(mens+"***"+obj)
+                self.enviar_Mensaje_Codificado(cod, obj)
 
         print("\nTe esperamos pronto!")
         time.sleep(5)

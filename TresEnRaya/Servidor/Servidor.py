@@ -6,6 +6,7 @@ import sys
 import json
 from Tablero import Tablero
 from Arbitro import Arbitro
+from Mensaje import Mensaje  
 
 #Clase Servidor
 class Servidor:
@@ -94,12 +95,28 @@ class Servidor:
         mensaje--mensaje que se quiere enviar
         cliente--cliente al que se le quiere enviar el mensaje
         """
-        try:
-            cliente.send(mensaje.encode("UTF-8"))
+        while True:
+            try:
+                cliente.send(mensaje.encode("UTF-8"))
+                break
+            except:
+                print("\nSend: No responde, se intentará en 5 seg")
+                time.sleep(5)
 
-        except:
-            print("\nSend: No responde, se intentará en 5 seg")
-            time.sleep(5)
+    def enviar_Mensaje_Codificado(self,cod,obj,cliente):
+        """
+        Crea un objeto Mensaje con el código de mensaje y el objeto
+        se lo envia al cliente
+        """
+        while True:
+            try:
+                mensaje = Mensaje(cod,obj)
+                cadena = mensaje.convertirEnCadena()
+                cliente.send(cadena.encode("UTF-8"))
+                break
+            except:
+                print("\nSend_esp: No responde, se intentará en 5 seg")
+                time.sleep(5)
 
     def interpretarMensaje(self,msg): 
         """
@@ -111,9 +128,9 @@ class Servidor:
         Return:
         mensaje interpretado
         """
-        if (len(msg) > 3):
-            msg = msg.split("***")
-            return msg[0], msg[1]
+        print(msg)
+        mensaje = Mensaje.convertirEnObjeto(msg)
+        return mensaje
 
     def inicializarJugador(self,cliente, id):
         """
@@ -125,12 +142,12 @@ class Servidor:
         """
         self.enviar_Mensaje("¿Desea empezar el juego?",cliente)
         respuesta = self.recibir(cliente)
-        cod, obj = self.interpretarMensaje(respuesta)
+        mensaje = self.interpretarMensaje(respuesta)
 
-        if (cod == "102"):
-            if obj == "1":
+        if (mensaje.getCode() == "102"):
+            if mensaje.getObj() == "1":
                 print("El jugador " + str(id) + " quiere jugar, se le envía el código de jugador")
-                self.enviar_Mensaje("201***"+str(id),cliente) 
+                self.enviar_Mensaje_Codificado("201",str(id),cliente) 
             else: 
                 print("El jugador " + str(id) + " no quiere jugar, finalizar conexión")
 
@@ -141,7 +158,7 @@ class Servidor:
         self.ligarSocket()
         self.s.listen(2)     #2 clientes
 
-        print("\nEsperando por los clientes")
+        print("\n\n/********************************\\\n   Esperando a los clientes\n\n")
 
         # Se inicializan los clientes 
         cliente1,direccion1 = self.conexiones()
@@ -154,15 +171,14 @@ class Servidor:
         # Le damos el identificador a cada Cliente
         self.inicializarJugador(cliente1,1)
         self.inicializarJugador(cliente2,2)
-        
+        print("\n********************************\n\n")
         arbitro = Arbitro(1,2)    
 
         # INICIA EL JUEGO
         cliente = cliente1 # Empieza jugando el jugador1
         mens,obj,dest = arbitro.arbitrar("103") # Le muestra el tablero
-        #Se convierte el objeto devuelto por jugar a str
-        #json.dumps(objeto) que te devuelve el str
-        self.enviar_Mensaje(mens+"***"+obj,cliente)  # Le envia un 202 tablero
+
+        self.enviar_Mensaje_Codificado(mens,obj,cliente)  # Le envia un 202 tablero
 
         while not self.exit:   # Necesarios para que los hilos no mueran
             """
@@ -171,24 +187,21 @@ class Servidor:
             pasarselo a jugador
             enviar respuesta
             """
-            mens, obj = self.interpretarMensaje(self.recibir(cliente))
-            
-            print("Recibido",mens,obj)
-            
-            mens, obj, dest = arbitro.arbitrar(mens,obj)
+            mensaje = self.interpretarMensaje(self.recibir(cliente))
+            mens, obj, dest = arbitro.arbitrar(mensaje.getCode(),mensaje.getObj())
 
             if (mens == "200"):        
-                self.enviar_Mensaje(mens+"***"+obj,cliente1)     
-                self.enviar_Mensaje(mens+"***"+obj,cliente2)     
+                self.enviar_Mensaje_Codificado(mens,obj,cliente1)     
+                self.enviar_Mensaje_Codificado(mens,obj,cliente2)     
                 self.exit = True
             elif dest == 1:
                 print("mens a cliente1")
                 cliente = cliente1
-                self.enviar_Mensaje(mens+"***"+obj,cliente)
+                self.enviar_Mensaje_Codificado(mens,obj,cliente)
             else:
                 print("mens a cliente2")
                 cliente = cliente2
-                self.enviar_Mensaje(mens+"***"+obj,cliente)
+                self.enviar_Mensaje_Codificado(mens,obj,cliente)
                 
         print("\nLos jugadores han terminado de jugar\n")
         time.sleep(5)
