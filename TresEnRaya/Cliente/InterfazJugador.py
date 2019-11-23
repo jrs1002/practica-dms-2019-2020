@@ -24,6 +24,8 @@ class InterfazJugador:
         """
         En función del mensaje recibido se realiza una cierta acción.
 
+        Si no se requiere ningún objeto se devolverá 0.
+
         Parámetros:
         msg -- Mensaje recibido del Servidor
         elem -- Objeto recibido del Servidor
@@ -32,18 +34,17 @@ class InterfazJugador:
         fin -- Código del mensaje a devolver en función de la acción realizada
         obj -- Objeto del mensaje a devolver en función de la acción realizada
         """
-
+        # Solicitar salir del juego
         if (msg == '200'):
             self.mostrarResultado(elem)
             return '100', '0'
 
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
-        # Si no se requiere ningún objeto se devolverá 0
         if (msg == '202'):
             print("\n\n")
             fin, obj = self.imprimirTablero(elem)
 
-        # Solicitar movimiento --> Si es erroneo con mensaje 203 ya se vuelve a solicitar
+        # Solicitar movimiento --> Si es erróneo con mensaje 203 ya se vuelve a solicitar
         if (msg == '203'):
             if (elem == '1'):
                 print("\nMovimiento incorrecto, introduzca un nuevo movimiento.\n")

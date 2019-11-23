@@ -57,7 +57,7 @@ class Servidor:
         print("| El cliente es:\t\t|\n|\t", direccion[0] + ":" + str(direccion[1])+"\t|")
         return cliente, direccion
 
-    def recibir(self, cliente):
+    def recibir(self, _cliente):
         """
         Se gestionan los mensajes recibidos de los clientes.
 
@@ -65,11 +65,11 @@ class Servidor:
         cliente -- Cliente que ha enviado el mensaje
 
         Return:
-        mensaje recibido 
+        reply.decode("UTF-8") -- Mensaje recibido 
         """
         while True:
             try:
-                reply = cliente.recv(2048)
+                reply = _cliente.recv(2048)
                 return reply.decode("UTF-8")
                 break
             except:
@@ -105,10 +105,10 @@ class Servidor:
                 print("Se intentará de nuevo en 5 segundos.\n")
                 time.sleep(5)
 
-    def enviar_Mensaje_Codificado(self, cod, obj, cliente):
+    def enviar_Mensaje_Codificado(self, cod, obj, _cliente):
         """
         Se crea un objeto Mensaje con el código de mensaje y el objeto
-        y se lo envia al Cliente.
+        y se lo envía al Cliente.
 
         Parámetros:
         cod -- Código del mensaje
@@ -118,7 +118,7 @@ class Servidor:
             try:
                 mensaje = Mensaje(cod, obj)
                 cadena = mensaje.convertirEnCadena()
-                cliente.send(cadena.encode("UTF-8"))
+                _cliente.send(cadena.encode("UTF-8"))
                 break
             except:
                 print("\nSend_esp: No responde.\n")
@@ -141,7 +141,8 @@ class Servidor:
 
     def inicializarJugador(self, _cliente, id):
         """
-        Se incializa un jugador, para lo que se requiere de un cliente y su id.
+        Se incializa un jugador, para lo que se requiere de un cliente y su id, 
+        enviándole el id que se le ha asignado.
 
         Parámetros:
         _cliente -- Cliente en el que se encuentra el jugador

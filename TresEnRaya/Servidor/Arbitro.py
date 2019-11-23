@@ -33,16 +33,20 @@ class Arbitro:
         turno -- Turno actual
         """
         fin = 0
+        # Tablero pintado en InterfazJugador --> solicitarMov
         if(msg == "101"):
             fin = "203"
             obj = "0"
 
+        # Solicitar tablero
         if(msg == "103"):
             fin, obj = self.dibujarTablero()
 
+        # Movimiento a realizar
         if(msg == "104"):
             fin, obj = self.realizarMovimiento(elem)
 
+        # Se ha realizado el movimiento y se ha actualizado el tablero
         if(msg == '105'):
             fin = self.esFin()
             if (fin == self.turno):
@@ -68,14 +72,14 @@ class Arbitro:
         movimiento = [mov[0]-1, mov[1]-1]
 
         correcto = self.comprobarMovimiento(movimiento)
+
+         # Movimiento correcto y actualizado en el tablero
         if (correcto == 1):
             self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-
-            # Movimiento correcto y actualizado en el tablero
             return "204", self.tablero.getTablero()
-
+        
+        # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
         if (correcto == 2 ):
-            # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
             return "203", "1"
 
     def comprobarMovimiento(self, mov):
@@ -90,8 +94,6 @@ class Arbitro:
         Return: 
         int -- Entero que indica si es correcto o no
         """
-        # TODO : RETURN 0 que se mira en realizar movimiento
-        # IMPORTANTE
         tab = self.tablero.getTablero()
         posibilidades = [0, 1, 2]
 

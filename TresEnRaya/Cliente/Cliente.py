@@ -30,7 +30,7 @@ class Cliente:
 
     def conectarse(self):
         """
-        Se conecta con el puerto y host pasados por parámetro.
+        Se conecta el socket con el puerto y host pasados por parámetro.
         """
         self.s.connect((self.host, self.port))
 
@@ -71,7 +71,7 @@ class Cliente:
     def enviar_Mensaje_Codificado(self, cod, obj):
         """
         Se crea un objeto Mensaje con el código de mensaje y el objeto
-        y se lo envia al Servidor.
+        pasados por parámetro y se lo envia al Servidor.
 
         Parámetros:
         cod -- Código del mensaje
@@ -174,7 +174,6 @@ class Cliente:
         time.sleep(5)
         self.s.close()
         self.s = None
-
 
 # Se crea el Cliente
 cliente = Cliente()

@@ -6,7 +6,7 @@ class Mensaje:
     def __init__(self, code, obj):
         """
         Método que inicializa el mensaje.
-        Se inicializan las variables guardando el codigo
+        Se inicializan las variables guardando el código
         y el objeto en un diccionario.
 
         Parámetros:
@@ -35,7 +35,7 @@ class Mensaje:
 
     def convertirEnCadena(self):
         """
-        Convirte el mensaje en un String (JSON).
+        Convierte el mensaje en un String (JSON).
 
         Return:
         content -- Mensaje en JSON
