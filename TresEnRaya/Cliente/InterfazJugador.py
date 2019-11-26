@@ -1,6 +1,10 @@
 import time
 
 # Clase InterfazJugador
+"""
+Capa de presentación
+Encargada de comunicarse con el jugador
+"""
 class InterfazJugador:
 
     def __init__(self, _jugador):
@@ -78,6 +82,8 @@ class InterfazJugador:
         Parámetros:
         _tablero -- Representación del tablero
         """
+        # TODO cambiaro por la instancia del tablero 
+        # añadir un nuevo constructor a tablero
         x = '    1    2    3 \n'
         for i in range(3):
             x += '   +---+---+---+\n' + str(i+1) + '  | '

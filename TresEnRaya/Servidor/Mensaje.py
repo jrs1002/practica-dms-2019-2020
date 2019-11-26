@@ -56,4 +56,3 @@ class Mensaje:
         """
         x = json.loads(mensaje)
         return Mensaje(x["code"], x["obj"])
-

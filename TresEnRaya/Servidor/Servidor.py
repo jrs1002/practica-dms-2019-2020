@@ -6,7 +6,7 @@ import sys
 import json
 from Tablero import Tablero
 from Arbitro import Arbitro
-from Mensaje import Mensaje
+from Mensaje import Mensaje as m
 
 # Clase Servidor
 class Servidor:
@@ -116,7 +116,7 @@ class Servidor:
         """
         while True:
             try:
-                mensaje = Mensaje(cod, obj)
+                mensaje = m.Mensaje(cod, obj)
                 cadena = mensaje.convertirEnCadena()
                 _cliente.send(cadena.encode("UTF-8"))
                 break
@@ -136,7 +136,7 @@ class Servidor:
         Return:
         mensaje -- Mensaje interpretado
         """
-        mensaje = Mensaje.convertirEnObjeto(msg)
+        mensaje = m.Mensaje.convertirEnObjeto(msg)
         return mensaje
 
     def inicializarJugador(self, _cliente, id):

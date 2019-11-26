@@ -7,6 +7,11 @@ class Tablero:
         """
         self.tab = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
+
+
+    # TODO def construirTablero(self,celdas)
+    # TODO crear clase pieza
+    
     def setFicha(self, color, posicionX, posicionY):
         """
         Coloca la ficha en la posición indicada.
