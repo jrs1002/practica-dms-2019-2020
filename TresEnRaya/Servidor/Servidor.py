@@ -3,10 +3,12 @@ from socket import *
 from _thread import *
 import time
 import sys
+sys.path.append('..')
+sys.path.append('../Cliente')
 import json
 from Tablero import Tablero
 from Arbitro import Arbitro
-from Mensaje import Mensaje as m
+from Cliente import Mensaje as m
 
 # Clase Servidor
 class Servidor:
