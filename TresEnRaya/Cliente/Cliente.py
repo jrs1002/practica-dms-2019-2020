@@ -2,11 +2,19 @@
 from socket import *
 import time
 import json
+import sys
+sys.path.append('..')
+sys.path.append('../Biblioteca')
 from _thread import *
 from InterfazJugador import InterfazJugador
-from Mensaje import Mensaje
+from Biblioteca import Mensaje
 
-# Clase Cliente
+"""
+Clase de Capa de Comunicaciones.
+
+Envía al Servidor lo que devuelve el IntermediarioCliente.
+Pasa a IntermediarioCliente lo que recibe del Servidor.
+"""
 class Cliente:
     def __init__(self):
         """

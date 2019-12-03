@@ -1,5 +1,5 @@
-from Tablero import Tablero
 
-tablero = Tablero()
+import numpy as np
+c= np.zeros((3,3), np.int32)
 
-x = tablero.dibujarTablero()
+print(c[0][1])

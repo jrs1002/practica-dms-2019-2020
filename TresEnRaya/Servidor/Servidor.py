@@ -4,13 +4,17 @@ from _thread import *
 import time
 import sys
 sys.path.append('..')
-sys.path.append('../Cliente')
+sys.path.append('../Biblioteca')
 import json
-from Tablero import Tablero
 from Arbitro import Arbitro
-from Cliente import Mensaje as m
+from Biblioteca import Mensaje as m
 
-# Clase Servidor
+"""
+Clase de Capa de Comunicaciones.
+
+Envía al Cliente lo que devuelve el IntermediarioServidor.
+Pasa a IntermediarioServidor lo que recibe del Cliente.
+"""
 class Servidor:
     def __init__(self):
         """
