@@ -1,13 +1,15 @@
+# Imports
 import time
+from Biblioteca import Pieza
 
-# Clase InterfazJugador
 """
-Capa de presentación
-Encargada de comunicarse con el jugador
+Clase de Capa de Presentación.
+
+Encargada de comunicarse con el jugador.
 """
 class InterfazJugador:
 
-    def __init__(self, _jugador):
+    def __init__(self, _id):
         """
         Método que inicializa la interfaz del jugador.
         Se establece el jugador (id) pasado por parámetro. 
@@ -16,50 +18,30 @@ class InterfazJugador:
         y qué ficha tiene.
 
         Parámetros:
-        _jugador -- Identificador de cliente
+        _id -- Identificador de cliente
         """
-        self.jugador = _jugador
-        self.ficha = 'X' if (_jugador == 1) else 'O'
+        self.id = _id
 
-        print('| Eres el jugador ' + str(self.jugador) +
-              '\t\t|\n|con ficha ' + self.ficha + '\t\t\t|')
-
-    def jugar(self, msg, elem=None):
         """
-        En función del mensaje recibido se realiza una cierta acción.
+        Diccionario con las piezas genéricas de los juegos.
+        """
+        self.piezas = {'X': 'X', 'O': 'O'}
 
-        Si no se requiere ningún objeto se devolverá 0.
+        print('| Eres el jugador ' + str(self.id) +
+              '\t\t|\n|con ficha ' + self.getRepresentacion(self.id) + '\t\t\t|') 
+    
+    def getRepresentacion(self, _rep):
+        """
+        Se obtiene la representación de la pieza genérica a partir del id
+        pasado.
 
         Parámetros:
-        msg -- Mensaje recibido del Servidor
-        elem -- Objeto recibido del Servidor
+        _rep -- Representación de la pieza genérica
 
         Return:
-        fin -- Código del mensaje a devolver en función de la acción realizada
-        obj -- Objeto del mensaje a devolver en función de la acción realizada
+
         """
-        # Solicitar salir del juego
-        if (msg == '200'):
-            self.mostrarResultado(elem)
-            return '100', '0'
-
-        # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
-        if (msg == '202'):
-            print("\n\n")
-            fin, obj = self.imprimirTablero(elem)
-
-        # Solicitar movimiento --> Si es erróneo con mensaje 203 ya se vuelve a solicitar
-        if (msg == '203'):
-            if (elem == '1'):
-                print("\nMovimiento incorrecto, introduzca un nuevo movimiento.\n")
-            fin, obj = self.solicitarMov()
-
-        if (msg == '204'):
-            fin, obj = self.imprimirTablero(elem)
-            print("\n\n")
-            fin = '105'
-
-        return fin, obj
+        return self.piezas[_rep]
 
     def mostrarResultado(self, obj):
         """
@@ -70,32 +52,48 @@ class InterfazJugador:
         """
         if (obj == "0"):
             print("\n****** HAS EMPATADO ******\n")
-        elif (obj == str(self.jugador)):
+        elif (obj == str(self.id)):
             print("\n****** HAS GANADO  ******\n")
         else:
             print("\n****** HAS PERDIDO  ******\n")
 
-    def imprimirTablero(self, tablero):
+    def imprimirPieza(self, pieza):
+        """
+        Se muestra por pantalla la representación de la pieza
+
+        Parámetros:
+        pieza -- Id de la pieza
+        """
+        return self.getRepresentacion(pieza.getRepresentacion())
+
+    def imprimirTablero(self, _tablero):
         """
         Se muestra por pantalla el tablero.
 
         Parámetros:
         _tablero -- Representación del tablero
         """
-        # TODO cambiaro por la instancia del tablero 
-        # añadir un nuevo constructor a tablero
+        # Se instancia el tablero (construirTablero) con las celdas pasadas
+        # Recorro el tablero:
+            # Si hay una instancia de Pieza llamo a imprimirPieza
+            # Si no imprimo un hueco
+
         x = '    1    2    3 \n'
         for i in range(3):
             x += '   +---+---+---+\n' + str(i+1) + '  | '
             for j in range(3):
 
-                if(tablero[i][j] == 0):
+                pos = _tablero[i][j]
+
+                if(pos == 0):
                     x += ' '
 
-                elif(tablero[i][j] == 1):
-                    x += 'X'
+                # Si en la posición hay una instancia de Pieza se imprime
+                # su representación 
+                # TODO mirar (isinstance(pos, Pieza))
                 else:
-                    x += 'O'
+                    x += self.imprimirPieza(pos)
+
                 x += ' | '
 
             x += '\n'

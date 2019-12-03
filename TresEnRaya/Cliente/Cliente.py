@@ -6,7 +6,7 @@ import sys
 sys.path.append('..')
 sys.path.append('../Biblioteca')
 from _thread import *
-from InterfazJugador import InterfazJugador
+from IntermediarioCliente import IntermediarioCliente
 from Biblioteca import Mensaje
 
 """
@@ -170,7 +170,7 @@ class Cliente:
             Comuniación con el jugador.
             """
             mensaje = self.interpretarMensaje(self.recibir())
-            cod, obj = jugador.jugar(mensaje.getCode(), mensaje.getObj())
+            cod, obj = IntermediarioCliente.jugar(mensaje.getCode(), mensaje.getObj())
             # Se convierte el objeto devuelto por jugar a str
             # json.dumps(objeto) que te lo devuelve en str
             if (cod == '100'):
