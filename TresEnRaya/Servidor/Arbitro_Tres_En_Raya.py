@@ -1,10 +1,15 @@
 # Imports
-from Tablero import Tablero
 import time
+import sys
+sys.path.append('..')
+sys.path.append('../Biblioteca')
+from Biblioteca import Tablero
+from Biblioteca import Pieza
 
 # Clase Arbitro
 class Arbitro:
-    def __init__(self, _jugador1, _jugador2):
+    
+     def __init__(self, _jugador1, _jugador2):
         """
         Se inicializa el árbitro con los jugadores que recibe como parámetro.
         Se instancia el tablero con el que se trabajará.
@@ -16,49 +21,8 @@ class Arbitro:
         """
         self.jugador1 = _jugador1    # Primer jugador
         self.jugador2 = _jugador2    # Segundo jugador
-        self.tablero = Tablero()     # Tablero en el que se trabaja
+        self.tablero = Tablero(3,3)     # Tablero en el que se trabaja
         self.turno = 1               # Turno actual
-
-    def arbitrar(self, msg, elem=None):
-        """
-        En función del mensaje recibido se realiza una cierta acción.
-
-        Parámetros:
-        msg -- Mensaje recibido del Cliente
-        elem -- Objeto recibido del Cliente
-
-        Return:
-        fin -- Código del mensaje a devolver en función de la acción realizada
-        obj -- Objeto del mensaje a devolver en función de la acción realizada
-        turno -- Turno actual
-        """
-        fin = 0
-        # Tablero pintado en InterfazJugador --> solicitarMov
-        if(msg == "101"):
-            fin = "203"
-            obj = "0"
-
-        # Solicitar tablero
-        if(msg == "103"):
-            fin, obj = self.dibujarTablero()
-
-        # Movimiento a realizar
-        if(msg == "104"):
-            fin, obj = self.realizarMovimiento(elem)
-
-        # Se ha realizado el movimiento y se ha actualizado el tablero
-        if(msg == '105'):
-            fin = self.esFin()
-            if (fin == self.turno):
-                return "200", str(self.turno), self.turno  # Codigo fin ganando
-            elif (fin == "0"):
-                return "200", "0", self.turno  # Codigo fin empate
-
-            self.cambiarTurno()
-            fin, obj = self.dibujarTablero()
-
-        # Se devuelve el codigo de respuesta, el objeto y el turno
-        return fin, obj, self.turno
 
     def realizarMovimiento(self, mov):
         """
@@ -75,7 +39,9 @@ class Arbitro:
 
          # Movimiento correcto y actualizado en el tablero
         if (correcto == 1):
-            self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
+            pieza = Pieza(self.turno)
+
+            self.tablero.setPieza(pieza, movimiento[0], movimiento[1])
             return "204", self.tablero.getTablero()
         
         # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
@@ -142,31 +108,4 @@ class Arbitro:
 
         return -1
 
-    def turnoActual(self):
-        """
-        Se devuelve el turno actual.
-
-        Return:
-        turno -- Turno actual
-        """
-        return self.turno
-
-    def cambiarTurno(self):
-        """
-        Se cambia el turno del jugador.
-        """
-        if(self.turno == 1):
-            self.turno = 2
-        else:
-            self.turno = 1
-
-    def dibujarTablero(self):
-        """
-        Se devuelve la representación del tablero actual y un 
-        código mensaje 202 "devolver tablero"
-
-        Return:
-        int -- Código del mensaje de "devolver tablero"
-        self.tablero.dibujarTablero() -- Representación del tablero
-        """
-        return "202", self.tablero.getTablero()
+    

@@ -5,9 +5,10 @@ import json
 import sys
 sys.path.append('..')
 sys.path.append('../Biblioteca')
+from Biblioteca import *
 from _thread import *
 from IntermediarioCliente import IntermediarioCliente
-from Biblioteca import Mensaje
+
 
 """
 Clase de Capa de Comunicaciones.

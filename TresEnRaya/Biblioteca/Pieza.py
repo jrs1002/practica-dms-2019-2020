@@ -2,7 +2,7 @@
 Clase de Capa de Datos.
 """
 class Pieza:
-    def __init__(self, _id, _representacion):
+    def __init__(self, _id):
         """
         Método que inicializa la pieza.
         Se inicializan las variables.
@@ -12,7 +12,8 @@ class Pieza:
         _representacion -- Representación de la pieza
         """
         self.id = _id
-        self.representacion = _representacion
+
+        self.piezas = {1: 'X', 2: 'O'}
 
     def getId(self):
         """
@@ -30,4 +31,4 @@ class Pieza:
         Return:
         representacion -- Representacion de la pieza
         """
-        return self.representacion
+        return self.piezas[self.getId()]

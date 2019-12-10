@@ -1,6 +1,9 @@
 # Imports
 import time
-from Biblioteca import Pieza
+import sys
+sys.path.append('..')
+sys.path.append('../Biblioteca')
+from Biblioteca import *
 
 """
 Clase de Capa de Presentación.
@@ -25,23 +28,23 @@ class InterfazJugador:
         """
         Diccionario con las piezas genéricas de los juegos.
         """
-        self.piezas = {'X': 'X', 'O': 'O'}
+        self.piezas = {1: 'X', 2: 'O'}
 
         print('| Eres el jugador ' + str(self.id) +
               '\t\t|\n|con ficha ' + self.getRepresentacion(self.id) + '\t\t\t|') 
     
-    def getRepresentacion(self, _rep):
+    def getRepresentacion(self, _id):
         """
         Se obtiene la representación de la pieza genérica a partir del id
         pasado.
 
         Parámetros:
-        _rep -- Representación de la pieza genérica
+        _id -- Id de la pieza genérica
 
         Return:
 
         """
-        return self.piezas[_rep]
+        return self.piezas[_id]
 
     def mostrarResultado(self, obj):
         """
@@ -64,7 +67,7 @@ class InterfazJugador:
         Parámetros:
         pieza -- Id de la pieza
         """
-        return self.getRepresentacion(pieza.getRepresentacion())
+        return self.getRepresentacion(pieza.getId())
 
     def imprimirTablero(self, _tablero):
         """
@@ -78,14 +81,21 @@ class InterfazJugador:
             # Si hay una instancia de Pieza llamo a imprimirPieza
             # Si no imprimo un hueco
 
-        x = '    1    2    3 \n'
-        for i in range(3):
-            x += '   +---+---+---+\n' + str(i+1) + '  | '
-            for j in range(3):
+        tamX = _tablero.getTamX()
+        tamY = _tablero.getTamY()
+
+        for i in range(tamX):
+            x = '\t' + str(i)
+
+        x = ' \n'
+
+        for i in range(tamY): 
+            x += '   ' + '+---'*tamX+'+\n' + str(i+1) + '  | '
+            for j in range(tamX):
 
                 pos = _tablero[i][j]
 
-                if(pos == 0):
+                if(pos == None):
                     x += ' '
 
                 # Si en la posición hay una instancia de Pieza se imprime
@@ -97,8 +107,11 @@ class InterfazJugador:
                 x += ' | '
 
             x += '\n'
-        x += '   +---+---+---+'
+
+        x += '   ' + '+---' * tamX + '+\n'
+
         print(x)
+        
         return "101", "0"  # Código DONE (tablero impreso)
 
     def solicitarMov(self):
