@@ -22,35 +22,38 @@ class IntermediarioCliente:
         En función del mensaje recibido se llama a la función
         correspondiente de InterfazJugador.
 
-        Si no se requiere ningún objeto se devolverá 0. #TODO
+        Si no se requiere ningún objeto se devolverá 0. 
 
         Parámetros:
         msg -- Mensaje recibido del Servidor
         elem -- Objeto recibido del Servidor
 
         Return:
-        fin -- Código del mensaje a devolver en función de la acción realizada
+        cod -- Código del mensaje a devolver en función de la acción realizada
         obj -- Objeto del mensaje a devolver en función de la acción realizada
         """
         # Solicitar salir del juego
         if (msg == '200'):
             ij.mostrarResultado(elem)
-            return '100', '0'
+            self.cod,self.obj = '100', '0'
 
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
         if (msg == '202'):
             print("\n\n")
-            fin, obj = ij.imprimirTablero(elem)
+            ij.imprimirTablero(elem)
+            self.cod,self.obj = "101","0"
 
         # Solicitar movimiento --> Si es erróneo con mensaje 203 ya se vuelve a solicitar
         if (msg == '203'):
             if (elem == '1'):
                 print("\nMovimiento incorrecto, introduzca un nuevo movimiento.\n")
-            fin, obj = ij.solicitarMov()
-
+            self.cod ="104"
+            self.obj = ij.solicitarMov()
+            
+        #Movimiento correcto
         if (msg == '204'):
-            fin, obj = ij.imprimirTablero(elem)
             print("\n\n")
-            fin = '105'
+            ij.imprimirTablero(elem)
+            self.cod,self.obj = "105","0"
 
-        return fin, obj
+        return self.cod, self.obj

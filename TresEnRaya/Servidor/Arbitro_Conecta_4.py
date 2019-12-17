@@ -29,20 +29,20 @@ class Arbitro_Conecta4:
         Se cambia de turno.
 
         Parámetros:
-        mov -- Coordenadas xy con el destino del movimiento
+        mov -- Coordenada de la columna con el destino del movimiento
         """
-        movimiento = [mov[0]-1, mov[1]-1]
+        tab = self.tablero.getTablero()
 
-        correcto = self.comprobarMovimiento(movimiento)
-
-         # Movimiento correcto y actualizado en el tablero
-        if (correcto == 1):
-            self.tablero.setFicha(self.turno, movimiento[0], movimiento[1])
-            return "204", self.tablero.getTablero()
+        # Movimiento correcto y actualizado en el tablero
+        if (self.comprobarMovimiento(mov)):
+            for i in tab.getTamX()-1:
+                if(tab[i][mov]==None):
+                    self.tablero.setPieza(Pieza(self.turno), i,mov)
+                    return True, self.tablero.getTablero()
         
-        # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
-        if (correcto == 2 ):
-            return "203", "1"
+        # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador.
+        else:
+            return False
 
     def comprobarMovimiento(self, mov):
         """
@@ -51,22 +51,19 @@ class Arbitro_Conecta4:
         y el estado del tablero.
 
         Parámetros:
-        mov -- [x,y] del destino del movimiento
+        mov -- y del destino del movimiento
 
         Return: 
-        int -- Entero que indica si es correcto o no
+        bool -- booleano que indica si es correcto o no
         """
         tab = self.tablero.getTablero()
-        posibilidades = [0, 1, 2]
 
         # Si el movimiento es correcto
-        if ((mov[0] in posibilidades) and
-            (mov[1] in posibilidades) and
-                (tab[mov[0]][mov[1]] == 0)):
-            return 1  # Movimiento correcto
+        if (mov < tab.getTamX() and mov > 0 and tab[tab.getTamY()-1][mov] == None):
+            return True  # Movimiento correcto
 
         else:  # Movimiento incorrecto
-            return 2
+            return False
 
     def esFin(self):
         """
@@ -82,9 +79,8 @@ class Arbitro_Conecta4:
         if(self.tablero.estaLleno()):
             return 0
          
-        for i in len(tab)-4: #TODO:El -4 es para que al hacer +3 no salte el error de irse de rango
-            for j in len(tab[0])-4:
-                # Líneas horizontales
+        for i in tab.getTamX()-4: #TODO:El -4 es para que al hacer +3 no salte el error de irse de rango
+            for j in tab.getTamY()-4:
                 if tab[i][j]==tab[i+1][j+1]==tab[i+2][j+2]==tab[i+3][j+3]==self.turno):
                     turno=self.turno
             

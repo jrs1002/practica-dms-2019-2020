@@ -41,8 +41,8 @@ class InterfazJugador:
         Parámetros:
         _id -- Id de la pieza genérica
 
-        Return:
-
+        Return: 
+        piezas[_id] -- representación de la pieza 
         """
         return self.piezas[_id]
 
@@ -76,11 +76,6 @@ class InterfazJugador:
         Parámetros:
         _tablero -- Representación del tablero
         """
-        # Se instancia el tablero (construirTablero) con las celdas pasadas
-        # Recorro el tablero:
-            # Si hay una instancia de Pieza llamo a imprimirPieza
-            # Si no imprimo un hueco
-
         tamX = _tablero.getTamX()
         tamY = _tablero.getTamY()
 
@@ -97,10 +92,6 @@ class InterfazJugador:
 
                 if(pos == None):
                     x += ' '
-
-                # Si en la posición hay una instancia de Pieza se imprime
-                # su representación 
-                # TODO mirar (isinstance(pos, Pieza))
                 else:
                     x += self.imprimirPieza(pos)
 
@@ -111,16 +102,13 @@ class InterfazJugador:
         x += '   ' + '+---' * tamX + '+\n'
 
         print(x)
-        
-        return "101", "0"  # Código DONE (tablero impreso)
 
     def solicitarMov(self):
         """
         Se solicita al jugador el movimiento.
 
         Return:
-        int -- Código de mensaje
-        mov -- Coordenadas xy del movimiento
+        mov -- Coordenadas del movimiento
         """
         posibles = [1,2,3]
         while True:
@@ -131,4 +119,4 @@ class InterfazJugador:
             else:
                 print(" ** Movimientos fuera de rango **")
         mov = [int(x),int(y)]
-        return "104", mov
+        return mov

@@ -35,18 +35,14 @@ class Arbitro:
         """
         movimiento = [mov[0]-1, mov[1]-1]
 
-        correcto = self.comprobarMovimiento(movimiento)
-
          # Movimiento correcto y actualizado en el tablero
-        if (correcto == 1):
-            pieza = Pieza(self.turno)
-
-            self.tablero.setPieza(pieza, movimiento[0], movimiento[1])
-            return "204", self.tablero.getTablero()
+        if (self.comprobarMovimiento(movimiento)):
+            self.tablero.setPieza(Pieza(self.turno), movimiento[0], movimiento[1])
+            return True, self.tablero.getTablero()
         
         # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
-        if (correcto == 2 ):
-            return "203", "1"
+        else:
+            return False
 
     def comprobarMovimiento(self, mov):
         """
@@ -58,19 +54,17 @@ class Arbitro:
         mov -- [x,y] del destino del movimiento
 
         Return: 
-        int -- Entero que indica si es correcto o no
+        bool -- booleano que indica si es correcto o no
         """
         tab = self.tablero.getTablero()
-        posibilidades = [0, 1, 2]
 
         # Si el movimiento es correcto
-        if ((mov[0] in posibilidades) and
-            (mov[1] in posibilidades) and
-                (tab[mov[0]][mov[1]] == 0)):
-            return 1  # Movimiento correcto
+        if (mov[0] < tab.getTamX() and mov[1] < tab.getTamY() and
+            tab[mov[0]][mov[1]] == None and mov[0]>0 and mov[1]>0) :
+            return True  # Movimiento correcto
 
         else:  # Movimiento incorrecto
-            return 2
+            return False
 
     def esFin(self):
         """

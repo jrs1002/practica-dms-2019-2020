@@ -1,5 +1,5 @@
 #Imports
-from #TODO importat arbitro
+from #TODO importat arbitro ?? abstracto??
 
 """
 Clase de Capa de Comunicaciones.
@@ -13,6 +13,7 @@ class IntermediarioServidor:
         """
         Método que inicializa el Intermediario del Servidor.
         Se inicializan las variables.
+        
         """
         self.cod = ''
         self.obj = ''
@@ -30,30 +31,40 @@ class IntermediarioServidor:
             obj -- Objeto del mensaje a devolver en función de la acción realizada
             turno -- Turno actual
             """
-            fin = 0
+            turno=arbitro.turnoActual()
+            
             # Tablero pintado en InterfazJugador --> solicitarMov
             if(msg == "101"):
-                fin = "203"
-                obj = "0"
+                self.cod = "203"
+                self.obj = "0"
 
             # Solicitar tablero
             if(msg == "103"):
-                fin, obj = self.dibujarTablero()
+                self.cod="202"
+                self.obj = self.dibujarTablero()
 
             # Movimiento a realizar
             if(msg == "104"):
-                fin, obj = self.realizarMovimiento(elem)
+                self.cod, self.obj = self.realizarMovimiento(elem)
+                if (self.cod):
+                    self.cod = "204"
+                else:
+                    self.cod = "203"
+                    self.obj = "1"
 
-            # Se ha realizado el movimiento y se ha actualizado el tablero
+            # Se ha realizado el movimiento y se ha actualizado el tablero 
             if(msg == '105'):
-                fin = self.esFin()
-                if (fin == self.turno):
-                    return "200", str(self.turno), self.turno  # Codigo fin ganando
-                elif (fin == "0"):
-                    return "200", "0", self.turno  # Codigo fin empate
+                self.obj = self.esFin()
+                
+                if (self.cod == turno):
+                    self.cod = "200"
+                    self.obj = str(turno)  # Codigo fin ganando
+                elif (self.cod == "0"):
+                    self.cod = "200"
+                    self.obj = "0"  # Codigo fin empate
 
-                self.cambiarTurno()
-                fin, obj = self.dibujarTablero()
+                arbitro.cambiarTurno()
+                self.cod, self.obj = self.dibujarTablero()
 
             # Se devuelve el codigo de respuesta, el objeto y el turno
-            return fin, obj, self.turno
+            return self.cod, self.obj, turno ##POR QUE DEVUELVE SIEMPRE TURNO?????????

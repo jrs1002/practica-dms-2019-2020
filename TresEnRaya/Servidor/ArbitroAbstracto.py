@@ -51,4 +51,4 @@ class Arbitro_Abstracto(ABC):
         int -- Código del mensaje de "devolver tablero"
         self.tablero.dibujarTablero() -- Representación del tablero
         """
-        return "202", self.tablero.getTablero()
+        return self.tablero.getTablero()
