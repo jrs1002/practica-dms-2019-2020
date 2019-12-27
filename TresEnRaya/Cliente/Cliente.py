@@ -129,7 +129,7 @@ class Cliente:
         Return:
         mensaje -- Mensaje interpretado
         """
-        mensaje = Mensaje.convertirEnObjeto(msg)
+        mensaje = Mensaje.convertirEnObjeto(msg) 
         return mensaje
 
     def inicializarJugador(self):
@@ -143,7 +143,7 @@ class Cliente:
         print("|-------------------------------|")
         print("|"+self.recibir()+"\t|")   # Se pregunta al jugador si quiere iniciar el juego
         respuesta = input()
-        mensaje = Mensaje("102", str(respuesta))
+        mensaje=("102",str(respuesta))
         cadena = mensaje.convertirEnCadena()
         self.enviar(cadena)
 
@@ -152,6 +152,16 @@ class Cliente:
         if(mensaje.getCode() == "201"):
             idJugador = int(mensaje.getObj())
             return InterfazJugador(idJugador)
+
+    def seleccionarJuego(self):
+        """
+        Se escoge el juego que se desea jugar, entre el Tres en Raya y el Conecta 4. 
+        Y se envia la respuesta al Servidor.
+        """
+        print("|"+self.recibir()+"\t|")
+        respuesta = input()
+        mensaje = respuesta.convertirEnCadena()
+        self.enviar(mensaje)
 
     def main(self):
         """
@@ -165,6 +175,8 @@ class Cliente:
 
         jugador = self.inicializarJugador()
         print("|_______________________________|\n\n")
+
+        self.seleccionarJuego()
 
         while not self.exit:   # Necesarios para que los hilos no mueran
             """

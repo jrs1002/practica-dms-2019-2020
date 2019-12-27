@@ -7,7 +7,7 @@ from Biblioteca import Tablero
 from Biblioteca import Pieza
 
 # Clase Arbitro
-class Arbitro:
+class Arbitro_Tres_En_Raya:
     
      def __init__(self, _jugador1, _jugador2):
         """

@@ -17,7 +17,7 @@ class IntermediarioCliente:
         self.cod = ''
         self.obj = ''
 
-    def jugar(self, msg, elem=None):
+     def jugar(self, msg, elem=None):
         """
         En función del mensaje recibido se llama a la función
         correspondiente de InterfazJugador.

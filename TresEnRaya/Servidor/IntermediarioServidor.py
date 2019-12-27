@@ -1,5 +1,6 @@
-#Imports
-from #TODO importat arbitro ?? abstracto??
+#IMPORTS
+from Arbitro_Conecta4 import Arbitro_Conecta4
+from Arbitro_Tres_En_Raya import Arbitro_Tres_En_Raya
 
 """
 Clase de Capa de Comunicaciones.
@@ -31,8 +32,15 @@ class IntermediarioServidor:
             obj -- Objeto del mensaje a devolver en función de la acción realizada
             turno -- Turno actual
             """
+
+            #Selección del juego a implementar
+            if(msg=="1"): 
+                arbitro=Arbitro_Tres_En_Raya(1,2) #Arbitro de Tres en Raya
+            elif(msg=="2"):
+                arbitro=Arbitro_Conecta4(1,2) #Arbitro de Conecta 4
+
             turno=arbitro.turnoActual()
-            
+
             # Tablero pintado en InterfazJugador --> solicitarMov
             if(msg == "101"):
                 self.cod = "203"
@@ -41,11 +49,11 @@ class IntermediarioServidor:
             # Solicitar tablero
             if(msg == "103"):
                 self.cod="202"
-                self.obj = self.dibujarTablero()
+                self.obj = arbitro.dibujarTablero()
 
             # Movimiento a realizar
             if(msg == "104"):
-                self.cod, self.obj = self.realizarMovimiento(elem)
+                self.cod, self.obj = arbitro.realizarMovimiento(elem)
                 if (self.cod):
                     self.cod = "204"
                 else:
@@ -54,7 +62,7 @@ class IntermediarioServidor:
 
             # Se ha realizado el movimiento y se ha actualizado el tablero 
             if(msg == '105'):
-                self.obj = self.esFin()
+                self.obj = arbitro.esFin()
                 
                 if (self.cod == turno):
                     self.cod = "200"
@@ -64,7 +72,7 @@ class IntermediarioServidor:
                     self.obj = "0"  # Codigo fin empate
 
                 arbitro.cambiarTurno()
-                self.cod, self.obj = self.dibujarTablero()
+                self.cod, self.obj = arbitro.dibujarTablero()
 
             # Se devuelve el codigo de respuesta, el objeto y el turno
-            return self.cod, self.obj, turno ##POR QUE DEVUELVE SIEMPRE TURNO?????????
+            return self.cod, self.obj, turno

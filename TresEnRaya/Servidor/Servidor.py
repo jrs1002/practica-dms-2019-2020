@@ -6,7 +6,6 @@ import sys
 sys.path.append('..')
 sys.path.append('../Biblioteca')
 import json
-from Arbitro import Arbitro
 from Biblioteca import Mensaje as m
 
 """
@@ -142,12 +141,12 @@ class Servidor:
         Return:
         mensaje -- Mensaje interpretado
         """
-        mensaje = m.Mensaje.convertirEnObjeto(msg)
+        mensaje = m.convertirEnObjeto(msg) 
         return mensaje
 
     def inicializarJugador(self, _cliente, id):
         """
-        Se incializa un jugador, para lo que se requiere de un cliente y su id, 
+        Se inicializa un jugador, para lo que se requiere de un cliente y su id, 
         enviándole el id que se le ha asignado.
 
         Parámetros:
@@ -159,14 +158,28 @@ class Servidor:
         respuesta = self.recibir(_cliente)
         mensaje = self.interpretarMensaje(respuesta)
 
-        if (mensaje.getCode() == "102"):
-            if mensaje.getObj() == "1":
+        if (m.getCode() == "102"): 
+            if m.getObj() == "1":
                 print("| El jugador " + str(id) +
                       " quiere jugar.\t|\n| Se le envía el id de jugador.\t|")
                 self.enviar_Mensaje_Codificado("201", str(id), _cliente)
             else:
                 print("| El jugador " + str(id) +
                       " no quiere jugar.|\n| Finalizar conexión.\t\t|")
+
+    def seleccionJuego(self,_cliente):
+        """
+        Se pregunta al cliente 1 qué juego desea jugar ya sea el Tres en Raya o el Conecta 4.
+
+        Parámetros:
+        _cliente -- Cliente en el que se encuentra el jugador
+        """
+        self.enviar_Mensaje("\n\n_________________________________\n\t\t\tSeleccione el juego deseado\nPrimera opción----->Tres en Raya\nSegunda Opcion----->Conecta 4\n\n_________________________________\n", _cliente)
+        respuesta = self.recibir(_cliente)
+        mensaje = self.interpretarMensaje(respuesta)
+        print("mensajeS",mensaje)
+        print("mensaje mensaje",mensaje.getCode())
+        return mensaje.getCode()
 
     def main(self):
         """
@@ -191,11 +204,15 @@ class Servidor:
         print("|-------------------------------|")
         self.inicializarJugador(cliente2, 2)
         print("|_______________________________|\n\n")
-        arbitro = Arbitro(1, 2)
+
+        #Ahora se pedirá escoger el juego que se desea jugar al primer jugador.
+        seleccion=self.seleccionJuego(cliente1)
+        #En función de la respuesta se llamará al arbitro de un juego o de otro(En el intermediarioServidor)
+        IntermediarioServidor.arbitrar(seleccion)
 
         # INICIA EL JUEGO
         cliente = cliente1  # Empieza jugando el jugador1
-        mens, obj, dest = arbitro.arbitrar("103")  # Le muestra el tablero
+        mens, obj, dest = IntermediarioServidor.arbitrar("103")  # Le muestra el tablero
 
         self.enviar_Mensaje_Codificado(
             mens, obj, cliente)  # Le envía un 202 tablero
@@ -205,8 +222,8 @@ class Servidor:
             Comunicación con el jugador
             """
             mensaje = self.interpretarMensaje(self.recibir(cliente))
-            mens, obj, dest = arbitro.arbitrar(
-                mensaje.getCode(), mensaje.getObj())
+            mens, obj, dest = IntermediarioServidor.arbitrar(
+                mensaje.getCode(), mensaje.getObj()) 
 
             if (mens == "200"):
                 self.enviar_Mensaje_Codificado(mens, obj, cliente1)
