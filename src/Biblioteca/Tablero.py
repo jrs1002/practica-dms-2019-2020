@@ -24,7 +24,7 @@ class Tablero:
     @classmethod
     def construirTablero(cls,celdas):
         '''
-        Método que crear el tablero según el tamaño de celdas pasado por parámetro
+        Método que crea el tablero según el array de celdas pasado por parámetro
 
         Parámetros:
         celdas -- Array de celdas 
@@ -33,24 +33,24 @@ class Tablero:
         for i, fila in enumerate(celdas):
             for j, celda in enumerate(fila):
                 if celda != 0:
-                    pieza = Pieza(celda,)
-                    tablero.setPieza(celda,i,j)
+                    pieza = Pieza(celda)
+                    tablero.setPieza(pieza,i,j)
                 else:
-                    tablero[i][j]=None
+                    tablero.setPieza(None,i,j)
         return tablero
     
     def tableroToArray(self):
         '''
         Método que convierte el tablero en un array
         '''
-        array = np.zeros((self.tamX,self.tamY), np.int32) 
-        
-        for i, fila in enumerate(self.celdas):
+        array = [] 
+        for i, fila in enumerate(self.tab):
+            array.append([])
             for j, celda in enumerate(fila):
                 if celda != None:
-                    array[i][j] = celda.getId()
+                    array[i],append(celda.getId())
                 else:
-                    array[i][j]=0
+                    array[i].append(0)
         return array
     
     def setPieza(self, pieza, posicionX, posicionY):

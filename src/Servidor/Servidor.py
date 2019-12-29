@@ -128,6 +128,7 @@ class Servidor:
                 _cliente.send(cadena.encode("UTF-8"))
                 break
             except:
+                print(cod, obj, _cliente)
                 print("\nSend_esp: No responde.\n")
                 print("Se intentará de nuevo en 5 segundos.\n")
                 time.sleep(5)
@@ -209,14 +210,13 @@ class Servidor:
         seleccion=self.seleccionJuego(cliente1)
 
         #En función de la respuesta se llamará al arbitro de un juego o de otro(En el intermediarioServidor)
-        IntermediarioServidor(seleccion) #Inicializamos el IntermediarioServidor y a su vez, el arbitro.
-        #IntermediarioServidor.inicializarArbitro(seleccion)
+        intermediario=IntermediarioServidor(seleccion) #Inicializamos el IntermediarioServidor y a su vez, el arbitro.
 
         # INICIA EL JUEGO
         cliente = cliente1  # Empieza jugando el jugador1
-        mens, obj, dest = IntermediarioServidor.arbitrar("0","103")  # Le muestra el tablero
+        mens, obj,dest = intermediario.arbitrar("103")  # Le muestra el tablero
 
-        self.enviar_Mensaje_Codificado(mens, obj, cliente)  # Le envía un 202 tablero
+        self.enviar_Mensaje_Codificado(mens, obj, cliente)  # Le envía un mensaje 202 y el tablero
 
         # Para que los hilos no mueran
         while not self.exit: 
@@ -224,7 +224,7 @@ class Servidor:
             Comunicación con el jugador
             """
             mensaje = self.interpretarMensaje(self.recibir(cliente))
-            mens, obj, dest = IntermediarioServidor.arbitrar("0", mensaje.getCode(), mensaje.getObj()) 
+            mens, obj, dest = intermediario.arbitrar(mensaje.getCode(), mensaje.getObj()) 
 
             if (mens == "200"):
                 self.enviar_Mensaje_Codificado(mens, obj, cliente1)

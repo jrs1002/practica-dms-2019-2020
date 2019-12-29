@@ -18,27 +18,29 @@ class Arbitro_Conecta_4(Arbitro_Abstracto):
         jugador1 -- Primer jugador (contiene el código para enviar mensajes)
         jugador2 -- Segundo jugador (contiene el código para enviar mensajes)
         """
-        super().__init__(self, _jugador1, _jugador2)
+        super().__init__(_jugador1, _jugador2)
         self.tablero = Tablero(6,7)  # Tablero en el que se trabaja
 
     def turnoActual(self):
         """
         Se devuelve el turno actual,para ello, se llama a la función turnoActual del padre (Arbitro_Abstracto)
         """
-        super().turnoActual(self)
+        super().turnoActual()
 
     def cambiarTurno(self):
         """
         Se cambia el turno del jugador,para ello, se llama a la función cambiarTurno del padre (Arbitro_Abstracto)
         """
-        super().cambiarTurno(self)
+        super().cambiarTurno()
 
     def dibujarTablero(self):
         """
         Se devuelve la representación del tablero actual
-        Para ello, se llama a la función dibujarTablero del padre (Arbitro_Abstracto)
+        
+        Return:
+        self.tablero.tableroToArray() -- Representación del tablero
         """
-        super().dibujarTablero(self)
+        return self.tablero.tableroToArray()
 
     def realizarMovimiento(self, mov):
         """

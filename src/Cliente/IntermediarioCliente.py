@@ -1,5 +1,5 @@
 #Imports
-from InterfazJugador import InterfazJugador as ij
+from InterfazJugador import InterfazJugador
 
 """
 Clase de Capa de Comunicaciones.
@@ -9,13 +9,14 @@ dependiendo de los mensajes recibidos de Cliente.
 """
 class IntermediarioCliente:
 
-     def __init__(self):
+     def __init__(self,jugador):
         """
         Método que inicializa el Intermediario del Cliente.
         Se inicializan las variables.
         """
         self.cod = ''
         self.obj = ''
+        self.ij=jugador
 
      def jugar(self, msg, elem=None):
         """
@@ -30,17 +31,18 @@ class IntermediarioCliente:
 
         Return:
         cod -- Código del mensaje a devolver en función de la acción realizada
-        obj -- Objeto del mensaje a devolver en función de la acción realizada
+        obj -- Objeto a devolver en función de la acción realizada
         """
         # Solicitar salir del juego
         if (msg == '200'):
-            ij.mostrarResultado(elem)
+            self.ij.mostrarResultado(elem)
             self.cod,self.obj = '100', '0'
 
         # Solicitar tablero --> Con mensaje 202 ya se va a imprimir
         if (msg == '202'):
             print("\n\n")
-            ij.imprimirTablero(elem)
+            #tab=construirTablero(elem)
+            self.ij.imprimirTablero(elem)
             self.cod,self.obj = "101","0"
 
         # Solicitar movimiento --> Si es erróneo con mensaje 203 ya se vuelve a solicitar
@@ -48,12 +50,12 @@ class IntermediarioCliente:
             if (elem == '1'):
                 print("\nMovimiento incorrecto, introduzca un nuevo movimiento.\n")
             self.cod ="104"
-            self.obj = ij.solicitarMov()
+            self.obj = self.ij.solicitarMov()
             
         #Movimiento correcto
         if (msg == '204'):
             print("\n\n")
-            ij.imprimirTablero(elem)
+            self.ij.imprimirTablero(elem)
             self.cod,self.obj = "105","0"
 
         return self.cod, self.obj

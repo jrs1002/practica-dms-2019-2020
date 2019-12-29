@@ -49,12 +49,3 @@ class Arbitro_Abstracto(ABC):
           self.turno = 2
       else:
           self.turno = 1
-   
-   def dibujarTablero(self):
-      """
-      Se devuelve la representación del tablero actual
-
-      Return:
-      self.tablero.dibujarTablero() -- Representación del tablero
-      """
-      return self.tablero.getTablero()
