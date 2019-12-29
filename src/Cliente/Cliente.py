@@ -27,7 +27,7 @@ class Cliente:
         self.client = ""
         self.s = socket(AF_INET, SOCK_STREAM)
         self.host = "0.0.0.0"
-        self.port = 9494
+        self.port = 9797
         self.exit = False
 
     def __del__(self):

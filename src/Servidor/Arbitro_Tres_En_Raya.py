@@ -21,6 +21,15 @@ class Arbitro_Tres_En_Raya(Arbitro_Abstracto):
         """
         Arbitro_Abstracto.__init__(self, _jugador1, _jugador2)
         self.tablero = Tablero(3,3)     # Tablero en el que se trabaja
+        
+     def turnoActual(self):
+        Arbitro_Abstracto.turnoActual(self)
+
+     def cambiarTurno(self):
+        Arbitro_Abstracto.cambiarTurno(self)
+
+     def dibujarTablero(self):
+        Arbitro_Abstracto.dibujarTablero(self)
 
      def realizarMovimiento(self, mov):
         """
@@ -40,7 +49,7 @@ class Arbitro_Tres_En_Raya(Arbitro_Abstracto):
         
         # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador
         else:
-            return False
+            return False,0
 
      def comprobarMovimiento(self, mov):
         """

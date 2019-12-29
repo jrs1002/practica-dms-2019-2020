@@ -9,8 +9,7 @@ Encargada de llamar a las funciones de Árbitro dependiendo
 de los mensajes recibidos del Servidor.
 """
 class IntermediarioServidor:
-
-     def __init__(self):
+     def __init__(self,respuesta):
         """
         Método que inicializa el Intermediario del Servidor.
         Se inicializan las variables.
@@ -18,61 +17,69 @@ class IntermediarioServidor:
         """
         self.cod = ''
         self.obj = ''
+        self.arbitro=self.inicializarArbitro(respuesta)
+
+     def inicializarArbitro(self,respuesta):
+        """
+        Según la opción de juego que seleccione el Cliente, 1(Tres en Raya) o 2(Conecta 4, se inicializará el arbitro de un juego u otro.
+        Siendo la respuesta el número de opción escogida, y por tanto, el juego seleccionado.
+
+        Parámetros:
+        respuesta -- Mensaje que contiene la opción de juego elegida por el CLiente(1-Tres en Raya y 2- Conecta 4)
+        """
+        if(respuesta=="1"):
+            self.arbitro=Arbitro_Tres_En_Raya(1,2) #Arbitro de Tres en Raya
+        elif(respuesta=="2"):
+            self.arbitro=Arbitro_Conecta_4(1,2) #Arbitro de Conecta 4
+        return self.arbitro
 
      def arbitrar(self,msg,elem=None):
-            """
-            En función del mensaje recibido se realiza una cierta acción.
+        """
+        En función del mensaje recibido se realiza una cierta acción.
 
-            Parámetros:
-            msg -- Mensaje recibido del Cliente
-            elem -- Objeto recibido del Cliente 
+        Parámetros:
+        msg -- Mensaje recibido del Cliente
+        elem -- Objeto recibido del Cliente 
 
-            Return:
-            fin -- Código del mensaje a devolver en función de la acción realizada
-            obj -- Objeto del mensaje a devolver en función de la acción realizada
-            turno -- Turno actual
-            """
+        Return:
+        fin -- Código del mensaje a devolver en función de la acción realizada
+        obj -- Objeto del mensaje a devolver en función de la acción realizada
+        turno -- Turno actual
+        """
+        turno=self.arbitro.turnoActual()
 
-            #Selección del juego a implementar
-            if(msg=="1"):
-                arbitro=Arbitro_Tres_En_Raya(1,2) #Arbitro de Tres en Raya
-            elif(msg=="2"):
-                arbitro=Arbitro_Conecta4(1,2) #Arbitro de Conecta 4
+        # Tablero pintado en InterfazJugador --> solicitarMov
+        if(msg == "101"):
+            self.cod = "203"
+            self.obj = "0"
 
-            turno=arbitro.turnoActual()
+        # Solicitar tablero
+        if(msg == "103"):
+            self.cod="202"
+            self.obj = self.arbitro.dibujarTablero()
 
-            # Tablero pintado en InterfazJugador --> solicitarMov
-            if(msg == "101"):
+        # Movimiento a realizar
+        if(msg == "104"):
+            self.cod, self.obj = self.arbitro.realizarMovimiento(elem)
+            if (self.cod):
+                self.cod = "204"
+            else:
                 self.cod = "203"
-                self.obj = "0"
+                self.obj = "1"
 
-            # Solicitar tablero
-            if(msg == "103"):
-                self.cod="202"
-                self.obj = arbitro.dibujarTablero()
+        # Se ha realizado el movimiento y se ha actualizado el tablero 
+        if(msg == '105'):
+            self.obj = self.arbitro.esFin()
+            
+            if (self.cod == turno):
+                self.cod = "200"
+                self.obj = str(turno)  # Codigo fin ganando
+            elif (self.cod == "0"):
+                self.cod = "200"
+                self.obj = "0"  # Codigo fin empate
 
-            # Movimiento a realizar
-            if(msg == "104"):
-                self.cod, self.obj = arbitro.realizarMovimiento(elem)
-                if (self.cod):
-                    self.cod = "204"
-                else:
-                    self.cod = "203"
-                    self.obj = "1"
+            turno=self.arbitro.cambiarTurno()
+            self.obj = self.arbitro.dibujarTablero()
 
-            # Se ha realizado el movimiento y se ha actualizado el tablero 
-            if(msg == '105'):
-                self.obj = arbitro.esFin()
-                
-                if (self.cod == turno):
-                    self.cod = "200"
-                    self.obj = str(turno)  # Codigo fin ganando
-                elif (self.cod == "0"):
-                    self.cod = "200"
-                    self.obj = "0"  # Codigo fin empate
-
-                arbitro.cambiarTurno()
-                self.cod, self.obj = arbitro.dibujarTablero()
-
-            # Se devuelve el codigo de respuesta, el objeto y el turno
-            return self.cod, self.obj, turno
+        # Se devuelve el codigo de respuesta, el objeto y el turno
+        return self.cod, self.obj, turno

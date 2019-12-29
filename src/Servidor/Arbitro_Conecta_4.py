@@ -21,6 +21,30 @@ class Arbitro_Conecta_4(Arbitro_Abstracto):
         Arbitro_Abstracto.__init__(self, _jugador1, _jugador2)
         self.tablero = Tablero(6,7)  # Tablero en el que se trabaja
 
+    def turnoActual(self):
+        """
+        Se devuelve el turno actual.
+
+        Return:
+        turno -- Turno actual
+        """
+        Arbitro_Abstracto.turnoActual(self)
+
+    def cambiarTurno(self):
+        """
+        Se cambia el turno del jugador.
+        """
+        Arbitro_Abstracto.cambiarTurno(self)
+
+    def dibujarTablero(self):
+        """
+        Se devuelve la representación del tablero actual
+
+        Return:
+        self.tablero.dibujarTablero() -- Representación del tablero
+        """
+        Arbitro_Abstracto.dibujarTablero(self)
+
     def realizarMovimiento(self, mov):
         """
         Se comprueba si el movimiento pasado por parámetro es correcto.
@@ -41,7 +65,7 @@ class Arbitro_Conecta_4(Arbitro_Abstracto):
         
         # Movimiento incorrecto, vuelve a solicitar el movimiento al jugador.
         else:
-            return False
+            return False,0
 
     def comprobarMovimiento(self, mov):
         """

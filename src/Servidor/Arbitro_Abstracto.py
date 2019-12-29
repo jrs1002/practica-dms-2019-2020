@@ -52,11 +52,9 @@ class Arbitro_Abstracto(ABC):
    
    def dibujarTablero(self):
       """
-      Se devuelve la representación del tablero actual y un 
-      código mensaje 202 "devolver tablero"
+      Se devuelve la representación del tablero actual
 
       Return:
-      int -- Código del mensaje de "devolver tablero"
       self.tablero.dibujarTablero() -- Representación del tablero
       """
       return self.tablero.getTablero()
