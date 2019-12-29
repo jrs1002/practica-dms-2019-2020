@@ -209,7 +209,8 @@ class Servidor:
         seleccion=self.seleccionJuego(cliente1)
 
         #En función de la respuesta se llamará al arbitro de un juego o de otro(En el intermediarioServidor)
-        IntermediarioServidor(seleccion) 
+        IntermediarioServidor(seleccion) #Inicializamos el IntermediarioServidor y a su vez, el arbitro.
+        #IntermediarioServidor.inicializarArbitro(seleccion)
 
         # INICIA EL JUEGO
         cliente = cliente1  # Empieza jugando el jugador1

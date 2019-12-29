@@ -19,17 +19,27 @@ class Arbitro_Tres_En_Raya(Arbitro_Abstracto):
         jugador1 -- Primer jugador (contiene el código para enviar mensajes)
         jugador2 -- Segundo jugador (contiene el código para enviar mensajes)
         """
-        Arbitro_Abstracto.__init__(self, _jugador1, _jugador2)
+        super().__init__(self, _jugador1, _jugador2)
         self.tablero = Tablero(3,3)     # Tablero en el que se trabaja
-        
+
      def turnoActual(self):
-        Arbitro_Abstracto.turnoActual(self)
+        """
+        Se devuelve el turno actual,para ello, se llama a la función turnoActual del padre (Arbitro_Abstracto)
+        """
+        super().turnoActual(self)
 
      def cambiarTurno(self):
-        Arbitro_Abstracto.cambiarTurno(self)
+        """
+        Se cambia el turno del jugador,para ello, se llama a la función cambiarTurno del padre (Arbitro_Abstracto)
+        """
+        super().cambiarTurno(self)
 
      def dibujarTablero(self):
-        Arbitro_Abstracto.dibujarTablero(self)
+        """
+        Se devuelve la representación del tablero actual.
+        Para ello, se llama a la función dibujarTablero del padre (Arbitro_Abstracto)
+        """
+        super().dibujarTablero(self)
 
      def realizarMovimiento(self, mov):
         """

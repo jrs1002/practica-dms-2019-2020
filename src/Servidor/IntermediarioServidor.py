@@ -13,10 +13,9 @@ class IntermediarioServidor:
         """
         Método que inicializa el Intermediario del Servidor.
         Se inicializan las variables.
-        
         """
-        self.cod = ''
-        self.obj = ''
+        self.cod = ""
+        self.obj = ""
         self.arbitro=self.inicializarArbitro(respuesta)
 
      def inicializarArbitro(self,respuesta):
@@ -28,10 +27,10 @@ class IntermediarioServidor:
         respuesta -- Mensaje que contiene la opción de juego elegida por el CLiente(1-Tres en Raya y 2- Conecta 4)
         """
         if(respuesta=="1"):
-            self.arbitro=Arbitro_Tres_En_Raya(1,2) #Arbitro de Tres en Raya
+            arbi=Arbitro_Tres_En_Raya(1,2) #Arbitro de Tres en Raya
         elif(respuesta=="2"):
-            self.arbitro=Arbitro_Conecta_4(1,2) #Arbitro de Conecta 4
-        return self.arbitro
+            arbi=Arbitro_Conecta_4(1,2) #Arbitro de Conecta 4
+        return arbi
 
      def arbitrar(self,msg,elem=None):
         """
@@ -46,7 +45,7 @@ class IntermediarioServidor:
         obj -- Objeto del mensaje a devolver en función de la acción realizada
         turno -- Turno actual
         """
-        turno=self.arbitro.turnoActual()
+        #turno=self.arbitro.turnoActual()
 
         # Tablero pintado en InterfazJugador --> solicitarMov
         if(msg == "101"):
