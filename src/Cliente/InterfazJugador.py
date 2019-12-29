@@ -3,7 +3,7 @@ import time
 import sys
 sys.path.append('..')
 sys.path.append('../Biblioteca')
-from Biblioteca import *
+from Tablero import Tablero
 
 """
 Clase de Capa de Presentación.
@@ -76,9 +76,10 @@ class InterfazJugador:
         Parámetros:
         _tablero -- Representación del tablero
         """
-        tablero=construirTablero(_tablero)
-        tamX = tablero.getTamX()
-        tamY = tablero.getTamY()
+        tabl=Tablero.construirTablero(_tablero)
+        tab=tabl.getTablero()
+        tamX = tabl.getTamX()
+        tamY = tabl.getTamY()
 
         for i in range(tamX):
             x = '\t' + str(i)
@@ -89,7 +90,7 @@ class InterfazJugador:
             x += '   ' + '+---'*tamX+'+\n' + str(i+1) + '  | '
             for j in range(tamX):
 
-                pos = _tablero[i][j]
+                pos = tab[i][j]
 
                 if(pos == None):
                     x += ' '

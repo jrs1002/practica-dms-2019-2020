@@ -26,14 +26,12 @@ class Arbitro_Tres_En_Raya(Arbitro_Abstracto):
         """
         Se devuelve el turno actual,para ello, se llama a la función turnoActual del padre (Arbitro_Abstracto)
         """
-        #Arbitro_Abstracto.turnoActual(self)
         super().turnoActual()
 
      def cambiarTurno(self):
         """
         Se cambia el turno del jugador,para ello, se llama a la función cambiarTurno del padre (Arbitro_Abstracto)
         """
-        #Arbitro_Abstracto.cambiarTurno(self)
         super().cambiarTurno()
 
      def dibujarTablero(self):

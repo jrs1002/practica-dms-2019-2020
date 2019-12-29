@@ -45,7 +45,7 @@ class IntermediarioServidor:
         obj -- Objeto del mensaje a devolver en función de la acción realizada
         turno -- Turno actual
         """
-        turno=self.arbitro.turno
+        turno=self.arbitro.turnoActual()
 
         # Tablero pintado en InterfazJugador --> solicitarMov
         if(msg == "101"):

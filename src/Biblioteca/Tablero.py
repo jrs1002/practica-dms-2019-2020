@@ -33,10 +33,10 @@ class Tablero:
         for i, fila in enumerate(celdas):
             for j, celda in enumerate(fila):
                 if celda != 0:
-                    pieza = Pieza(celda,)
-                    tablero.setPieza(celda,i,j)
+                    pieza = Pieza(celda)
+                    tablero.setPieza(pieza,i,j)
                 else:
-                    tablero[i][j]=None
+                    tablero.setPieza(None,i,j)
         return tablero
     
     def tableroToArray(self):

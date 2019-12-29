@@ -26,7 +26,7 @@ class Servidor:
         """
         self.s = socket(AF_INET, SOCK_STREAM)
         self.host = "0.0.0.0"
-        self.port = 9494
+        self.port = 9797
 
         # El servidor le asigna un número a los clientes según esta lista
         self.lista_de_clientes = ["2", "1"]
@@ -124,9 +124,7 @@ class Servidor:
         while True:
             try:
                 mensaje = Mensaje(cod, obj)
-                print("error1",mensaje)
                 cadena = mensaje.convertirEnCadena()
-                print("error2",cadena)
                 _cliente.send(cadena.encode("UTF-8"))
                 break
             except:
@@ -218,7 +216,6 @@ class Servidor:
         cliente = cliente1  # Empieza jugando el jugador1
         mens, obj,dest = intermediario.arbitrar("103")  # Le muestra el tablero
 
-        #print(type(obj),obj)
         self.enviar_Mensaje_Codificado(mens, obj, cliente)  # Le envía un mensaje 202 y el tablero
 
         # Para que los hilos no mueran
@@ -227,21 +224,16 @@ class Servidor:
             Comunicación con el jugador
             """
             mensaje = self.interpretarMensaje(self.recibir(cliente))
-            print("hile S",mensaje)
-            mens, obj, dest = IntermediarioServidor.arbitrar(mensaje.getCode(), mensaje.getObj()) 
-            print("while servidor",mens, obj, dest)
+            mens, obj, dest = intermediario.arbitrar(mensaje.getCode(), mensaje.getObj()) 
 
             if (mens == "200"):
-                print("222222")
                 self.enviar_Mensaje_Codificado(mens, obj, cliente1)
                 self.enviar_Mensaje_Codificado(mens, obj, cliente2)
                 self.exit = True
             elif dest == 1:
-                print("00000")
                 cliente = cliente1
                 self.enviar_Mensaje_Codificado(mens, obj, cliente)
             else:
-                print("11111")
                 cliente = cliente2
                 self.enviar_Mensaje_Codificado(mens, obj, cliente)
 
