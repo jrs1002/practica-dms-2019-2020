@@ -37,7 +37,7 @@ class IntermediarioServidor:
             if(msg=="1"):
                 arbitro=Arbitro_Tres_En_Raya(1,2) #Arbitro de Tres en Raya
             elif(msg=="2"):
-                arbitro=Arbitro_Conecta4(1,2) #Arbitro de Conecta 4
+                arbitro=Arbitro_Conecta_4(1,2) #Arbitro de Conecta 4
 
             turno=arbitro.turnoActual()
 

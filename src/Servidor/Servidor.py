@@ -206,6 +206,7 @@ class Servidor:
 
         #Ahora se pedirá escoger el juego que se desea jugar al primer jugador.
         seleccion=self.seleccionJuego(cliente1)
+        
         #En función de la respuesta se llamará al arbitro de un juego o de otro(En el intermediarioServidor)
         mens, obj, dest = IntermediarioServidor.arbitrar("102",seleccion) 
         """DUDAAAAAAA:NO ENTIENDO PORQUÉ HAY QUE PASAR DOS PARAMETROS SI UNO ES EL SELF U OTRO ESTA A =NONE"""
