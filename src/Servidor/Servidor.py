@@ -26,7 +26,7 @@ class Servidor:
         """
         self.s = socket(AF_INET, SOCK_STREAM)
         self.host = "0.0.0.0"
-        self.port = 9797
+        self.port = 9494
 
         # El servidor le asigna un número a los clientes según esta lista
         self.lista_de_clientes = ["2", "1"]
@@ -124,10 +124,13 @@ class Servidor:
         while True:
             try:
                 mensaje = Mensaje(cod, obj)
+                print("error1",mensaje)
                 cadena = mensaje.convertirEnCadena()
+                print("error2",cadena)
                 _cliente.send(cadena.encode("UTF-8"))
                 break
             except:
+                print(cod, obj, _cliente)
                 print("\nSend_esp: No responde.\n")
                 print("Se intentará de nuevo en 5 segundos.\n")
                 time.sleep(5)
@@ -209,14 +212,14 @@ class Servidor:
         seleccion=self.seleccionJuego(cliente1)
 
         #En función de la respuesta se llamará al arbitro de un juego o de otro(En el intermediarioServidor)
-        IntermediarioServidor(seleccion) #Inicializamos el IntermediarioServidor y a su vez, el arbitro.
-        #IntermediarioServidor.inicializarArbitro(seleccion)
+        intermediario=IntermediarioServidor(seleccion) #Inicializamos el IntermediarioServidor y a su vez, el arbitro.
 
         # INICIA EL JUEGO
         cliente = cliente1  # Empieza jugando el jugador1
-        mens, obj, dest = IntermediarioServidor.arbitrar("0","103")  # Le muestra el tablero
+        mens, obj,dest = intermediario.arbitrar("103")  # Le muestra el tablero
 
-        self.enviar_Mensaje_Codificado(mens, obj, cliente)  # Le envía un 202 tablero
+        #print(type(obj),obj)
+        self.enviar_Mensaje_Codificado(mens, obj, cliente)  # Le envía un mensaje 202 y el tablero
 
         # Para que los hilos no mueran
         while not self.exit: 
@@ -224,16 +227,21 @@ class Servidor:
             Comunicación con el jugador
             """
             mensaje = self.interpretarMensaje(self.recibir(cliente))
-            mens, obj, dest = IntermediarioServidor.arbitrar("0", mensaje.getCode(), mensaje.getObj()) 
+            print("hile S",mensaje)
+            mens, obj, dest = IntermediarioServidor.arbitrar(mensaje.getCode(), mensaje.getObj()) 
+            print("while servidor",mens, obj, dest)
 
             if (mens == "200"):
+                print("222222")
                 self.enviar_Mensaje_Codificado(mens, obj, cliente1)
                 self.enviar_Mensaje_Codificado(mens, obj, cliente2)
                 self.exit = True
             elif dest == 1:
+                print("00000")
                 cliente = cliente1
                 self.enviar_Mensaje_Codificado(mens, obj, cliente)
             else:
+                print("11111")
                 cliente = cliente2
                 self.enviar_Mensaje_Codificado(mens, obj, cliente)
 

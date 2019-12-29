@@ -76,8 +76,9 @@ class InterfazJugador:
         Parámetros:
         _tablero -- Representación del tablero
         """
-        tamX = _tablero.getTamX()
-        tamY = _tablero.getTamY()
+        tablero=construirTablero(_tablero)
+        tamX = tablero.getTamX()
+        tamY = tablero.getTamY()
 
         for i in range(tamX):
             x = '\t' + str(i)

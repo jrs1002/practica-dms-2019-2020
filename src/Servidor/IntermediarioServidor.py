@@ -14,8 +14,8 @@ class IntermediarioServidor:
         Método que inicializa el Intermediario del Servidor.
         Se inicializan las variables.
         """
-        self.cod = ""
-        self.obj = ""
+        self.cod = " "
+        self.obj = None
         self.arbitro=self.inicializarArbitro(respuesta)
 
      def inicializarArbitro(self,respuesta):
@@ -45,7 +45,7 @@ class IntermediarioServidor:
         obj -- Objeto del mensaje a devolver en función de la acción realizada
         turno -- Turno actual
         """
-        #turno=self.arbitro.turnoActual()
+        turno=self.arbitro.turno
 
         # Tablero pintado en InterfazJugador --> solicitarMov
         if(msg == "101"):
@@ -54,7 +54,7 @@ class IntermediarioServidor:
 
         # Solicitar tablero
         if(msg == "103"):
-            self.cod="202"
+            self.cod= "202"
             self.obj = self.arbitro.dibujarTablero()
 
         # Movimiento a realizar
@@ -73,7 +73,7 @@ class IntermediarioServidor:
             if (self.cod == turno):
                 self.cod = "200"
                 self.obj = str(turno)  # Codigo fin ganando
-            elif (self.cod == "0"):
+            elif (cod == "0"):
                 self.cod = "200"
                 self.obj = "0"  # Codigo fin empate
 

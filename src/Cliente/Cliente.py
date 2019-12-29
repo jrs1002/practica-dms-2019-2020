@@ -27,7 +27,7 @@ class Cliente:
         self.client = ""
         self.s = socket(AF_INET, SOCK_STREAM)
         self.host = "0.0.0.0"
-        self.port = 9797
+        self.port = 9494
         self.exit = False
 
     def __del__(self):
@@ -181,12 +181,16 @@ class Cliente:
         #Se pregunta al jugador 1(cliente 1) qué juego desea jugar(entre el Tres en Raya y el Conecta 4)
         self.seleccionarJuego()
 
+        Intermediario=IntermediarioCliente()
+
         while not self.exit:   # Necesarios para que los hilos no mueran
             """
             Comuniación con el jugador.
             """
             mensaje = self.interpretarMensaje(self.recibir())
-            cod, obj = IntermediarioCliente.jugar(mensaje.getCode(), mensaje.getObj())
+
+            cod, obj = Intermediario.jugar(mensaje.getCode(), mensaje.getObj())
+            print("ClIENTE",obj)
             # Se convierte el objeto devuelto por jugar a str
             # json.dumps(objeto) que te lo devuelve en str
             if (cod == '100'):
